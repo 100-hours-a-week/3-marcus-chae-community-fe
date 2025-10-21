@@ -1,1 +1,45 @@
-로그인 페이지입니다.
+<html>
+
+<head>
+    <title>로그인</title>
+    <link rel="stylesheet" href="../css/common.css">
+    <style>
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header-component logged-in="false"></header-component>
+
+    <main>
+
+        <form id="loginForm">
+            <input-block label="이메일" type="email" input-id="email"></input-block>
+            <input-block label="비밀번호" type="password" input-id="password"></input-block>
+            <button id="loginButton" type="button">로그인</button>
+        </form>
+        <button id="toSignupPageButton">회원가입</button>
+
+    </main>
+
+    <footer-component></footer-component>
+
+    <script src="../js/components.js"></script>
+    <script>
+        // input 요소에 접근
+        const email = document.getElementById("email");
+        const password = document.getElementById("password");
+        const loginButton = document.getElementById("loginButton");
+        const toSignupPageButton = document.getElementById("toSignupPageButton");
+
+        toSignupPageButton.addEventListener("click", () => {
+            location.href = "signup.html";
+        })
+    </script>
+</body>
+
+</html>
