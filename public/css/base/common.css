@@ -1,0 +1,158 @@
+/* ==================== Imports ==================== */
+@import '../design-system/variables.css';
+
+/* ==================== Reset & Base ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family-base);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-secondary);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+/* ==================== Header Styles ==================== */
+.site-header {
+    background-color: var(--color-white);
+    border-bottom: 1px solid var(--color-border-medium);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    box-shadow: var(--shadow-sm);
+}
+
+.header-container {
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    padding: var(--spacing-4) var(--spacing-5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left,
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.logo-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary-500);
+    padding: 0;
+    transition: opacity var(--transition-base);
+}
+
+.logo-button:hover {
+    opacity: 0.8;
+}
+
+.logo-text {
+    display: inline-block;
+}
+
+.user-nickname {
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-sm);
+}
+
+/* Note: 버튼 스타일은 /css/components/button.css 사용 */
+
+/* ==================== Footer Styles ==================== */
+.site-footer {
+    background-color: var(--color-white);
+    border-top: 1px solid var(--color-border-medium);
+    margin-top: auto;
+}
+
+.footer-container {
+    max-width: var(--container-xl);
+    margin: 0 auto;
+    padding: var(--spacing-6) var(--spacing-5);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-4);
+}
+
+.footer-text {
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-sm);
+}
+
+.footer-links {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.footer-link {
+    color: var(--color-text-tertiary);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    transition: color var(--transition-base);
+}
+
+.footer-link:hover {
+    color: var(--color-primary-500);
+}
+
+.separator {
+    color: var(--color-border-medium);
+}
+
+/* Note: Input Block 스타일은 /css/components/input.css 사용 */
+
+/* ==================== Utility Classes ==================== */
+.horizontalLayout {
+    display: flex;
+    align-items: center;
+}
+
+.toLeft {
+    margin-right: auto;
+}
+
+.toRight {
+    margin-left: auto;
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 768px) {
+    .header-container,
+    .footer-container {
+        padding: var(--spacing-3) var(--spacing-4);
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .logo-text {
+        font-size: var(--font-size-xl);
+    }
+}

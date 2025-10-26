@@ -1,28 +1,79 @@
-<html>
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>커뮤니티 홈</title>
+        <link rel="stylesheet" href="../css/base/common.css" />
+        <link rel="stylesheet" href="../css/components/button.css" />
+        <link rel="stylesheet" href="../css/components/loading.css" />
+        <link rel="stylesheet" href="../css/components/state.css" />
+        <link rel="stylesheet" href="../css/components/toast.css" />
+        <link rel="stylesheet" href="../css/pages/home.css" />
+    </head>
 
-<head>
-    <title>홈페이지</title>
-    <link rel="stylesheet" href="../css/common.css">
-    <style>
-        main {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-    </style>
-</head>
+    <body>
+        <header-component></header-component>
 
-<body>
-    <header-component logged-in="false"></header-component>
+        <main>
+            <!-- 환영 섹션 -->
+            <section class="welcome-section" aria-labelledby="welcome-title">
+                <div class="welcome-content">
+                    <h1 id="welcome-title">커뮤니티</h1>
+                    <p>다양한 이야기를 나눠보세요</p>
+                </div>
+                <div class="welcome-actions" id="welcomeActions">
+                    <!-- 로그인 상태에 따라 동적으로 버튼 표시 -->
+                </div>
+            </section>
 
-    <main>
-        <h1>홈페이지</h1>
-    </main>
+            <!-- 게시글 목록 섹션 -->
+            <section class="posts-section">
+                <div class="posts-container">
+                    <div class="posts-header">
+                        <h2 class="posts-title">최신 게시글</h2>
+                        <button class="btn btn-primary" id="createPostBtn" style="display: none">
+                            게시글 작성
+                        </button>
+                    </div>
 
-    <footer-component></footer-component>
+                    <!-- 게시글 목록 -->
+                    <div class="posts-list" id="postsList">
+                        <!-- 게시글 카드들이 동적으로 추가됩니다 -->
+                    </div>
 
-    <script src="../js/components.js"></script>
-</body>
+                    <!-- 무한 스크롤 감지용 센티널 -->
+                    <div id="scrollSentinel" style="height: 1px;"></div>
 
+                    <!-- 로딩 인디케이터 -->
+                    <div class="loading-indicator" id="loadingIndicator">
+                        <div class="spinner"></div>
+                        <p>게시글을 불러오는 중...</p>
+                    </div>
+
+                    <!-- 끝에 도달했을 때 표시 -->
+                    <div class="end-message" id="endMessage" style="display: none">
+                        <p>모든 게시글을 불러왔습니다.</p>
+                    </div>
+
+                    <!-- 빈 상태 표시 -->
+                    <div class="empty-state" id="emptyState" style="display: none">
+                        <div class="empty-icon">📝</div>
+                        <h3>아직 게시글이 없습니다</h3>
+                        <p>첫 번째 게시글을 작성해보세요!</p>
+                        <button class="btn btn-primary" id="emptyCreateBtn">게시글 작성하기</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer-component></footer-component>
+
+        <!-- 스크립트 -->
+        <script type="module">
+            import '../js/components/index.js';
+            import '../js/pages/home.page.js';
+            import '../js/pages/posts.page.js';
+        </script>
+    </body>
 </html>

@@ -1,0 +1,209 @@
+/* ==================== Profile Page Styles ==================== */
+
+/* ==================== Welcome Section ==================== */
+.welcome-section {
+    background: linear-gradient(
+        135deg,
+        var(--color-primary-500) 0%,
+        var(--color-primary-600) 100%
+    );
+    color: var(--color-white);
+    padding: var(--spacing-12) var(--spacing-5);
+    text-align: center;
+}
+
+.welcome-content {
+    max-width: var(--container-md);
+    margin: 0 auto;
+}
+
+.welcome-section h1 {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-3);
+    color: var(--color-white);
+    line-height: var(--line-height-tight);
+}
+
+.welcome-section p {
+    font-size: var(--font-size-lg);
+    color: var(--color-white);
+    opacity: 0.95;
+    line-height: var(--line-height-relaxed);
+}
+
+/* ==================== Profile Container ==================== */
+.profile-container {
+    max-width: var(--container-md);
+    margin: 0 auto;
+    padding: var(--spacing-8) var(--spacing-5);
+    min-height: calc(100vh - 400px);
+}
+
+.profile-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-8);
+}
+
+/* ==================== Section Header ==================== */
+.section-header {
+    margin-bottom: var(--spacing-6);
+}
+
+.section-header h2 {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-2);
+}
+
+.section-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+    line-height: var(--line-height-relaxed);
+}
+
+/* ==================== Profile Info Card ==================== */
+.profile-info-section {
+    padding: var(--spacing-8);
+    background-color: var(--color-white);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border-light);
+}
+
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+}
+
+.profile-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-4);
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+}
+
+.profile-item:hover {
+    background-color: var(--color-gray-100);
+}
+
+.profile-label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+    min-width: 100px;
+}
+
+.profile-value {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    text-align: right;
+}
+
+/* ==================== Edit Card ==================== */
+.profile-edit-section,
+.password-change-section {
+    padding: var(--spacing-8);
+    background-color: var(--color-white);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border-light);
+}
+
+.edit-card {
+    /* input-block 컴포넌트가 내부 간격 관리 */
+}
+
+.form-actions {
+    margin-top: var(--spacing-6);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-3);
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 768px) {
+    .welcome-section {
+        padding: var(--spacing-8) var(--spacing-4);
+    }
+
+    .welcome-section h1 {
+        font-size: var(--font-size-3xl);
+    }
+
+    .welcome-section p {
+        font-size: var(--font-size-base);
+    }
+
+    .profile-container {
+        padding: var(--spacing-6) var(--spacing-4);
+    }
+
+    .profile-content {
+        gap: var(--spacing-6);
+    }
+
+    .profile-info-section,
+    .profile-edit-section,
+    .password-change-section {
+        padding: var(--spacing-6);
+        border-radius: var(--radius-xl);
+    }
+
+    .section-header h2 {
+        font-size: var(--font-size-xl);
+    }
+
+    .profile-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-2);
+    }
+
+    .profile-label {
+        min-width: auto;
+    }
+
+    .profile-value {
+        text-align: left;
+    }
+
+    .form-actions {
+        justify-content: stretch;
+    }
+
+    .form-actions .btn {
+        flex: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-container {
+        padding: var(--spacing-4) var(--spacing-3);
+    }
+
+    .profile-info-section,
+    .profile-edit-section,
+    .password-change-section {
+        padding: var(--spacing-4);
+    }
+
+    .section-header h2 {
+        font-size: var(--font-size-lg);
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+}

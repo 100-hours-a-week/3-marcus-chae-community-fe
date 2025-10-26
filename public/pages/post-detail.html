@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>게시글 상세보기</title>
+        <link rel="stylesheet" href="../css/base/common.css" />
+        <link rel="stylesheet" href="../css/components/button.css" />
+        <link rel="stylesheet" href="../css/components/input.css" />
+        <link rel="stylesheet" href="../css/components/loading.css" />
+        <link rel="stylesheet" href="../css/components/state.css" />
+        <link rel="stylesheet" href="../css/components/modal.css" />
+        <link rel="stylesheet" href="../css/components/toast.css" />
+        <link rel="stylesheet" href="../css/pages/post-detail.css" />
+    </head>
+
+    <body>
+        <header-component></header-component>
+
+        <main>
+            <!-- 게시글 상세 섹션 -->
+            <section class="post-detail-section">
+                <!-- 로딩 인디케이터 -->
+                <div class="loading-indicator" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <p>게시글을 불러오는 중...</p>
+                </div>
+
+                <!-- 에러 상태 -->
+                <div class="error-state" id="errorState" style="display: none">
+                    <div class="error-icon">⚠️</div>
+                    <h2>게시글을 불러올 수 없습니다</h2>
+                    <p id="errorMessage"></p>
+                    <button class="btn btn-secondary" id="backToHomeBtn">
+                        홈으로 돌아가기
+                    </button>
+                </div>
+
+                <!-- 게시글 컨테이너 -->
+                <article class="post-container" id="postContainer" style="display: none">
+                    <!-- 게시글 헤더 -->
+                    <header class="post-header">
+                        <h1 class="post-title" id="postTitle"></h1>
+                        <div class="post-meta">
+                            <div class="post-author">
+                                <span class="author-icon">👤</span>
+                                <span class="author-name" id="authorName"></span>
+                            </div>
+                            <div class="post-info">
+                                <span class="post-date" id="postDate"></span>
+                                <span class="post-views">
+                                    <span class="views-icon">👁️</span>
+                                    <span id="viewCount">0</span>
+                                </span>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- 게시글 액션 버튼 (작성자만 표시) -->
+                    <div class="post-actions" id="postActions" style="display: none">
+                        <button class="btn btn-secondary btn-sm" id="editPostBtn">수정</button>
+                        <button class="btn btn-danger btn-sm" id="deletePostBtn">삭제</button>
+                    </div>
+
+                    <!-- 게시글 본문 -->
+                    <div class="post-content" id="postContent"></div>
+
+                    <!-- 목록으로 버튼 -->
+                    <div class="post-footer">
+                        <button class="btn btn-secondary" id="backToListBtn">목록으로</button>
+                    </div>
+                </article>
+
+                <!-- 댓글 섹션 -->
+                <section class="comments-section" id="commentsSection" style="display: none">
+                    <div class="comments-header">
+                        <h2 class="comments-title">
+                            댓글 <span class="comment-count" id="commentCount">0</span>
+                        </h2>
+                    </div>
+
+                    <!-- 댓글 작성 폼 (로그인 시만 표시) -->
+                    <div class="comment-form-container" id="commentFormContainer" style="display: none">
+                        <form class="comment-form" id="commentForm">
+                            <textarea
+                                class="comment-input"
+                                id="commentInput"
+                                placeholder="댓글을 입력하세요"
+                                rows="3"
+                                maxlength="500"
+                            ></textarea>
+                            <div class="comment-form-footer">
+                                <span class="comment-length" id="commentLength">0/500</span>
+                                <button type="submit" class="btn btn-primary btn-sm">댓글 작성</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- 로그인 유도 메시지 (비로그인 시 표시) -->
+                    <div class="login-prompt" id="loginPrompt" style="display: none">
+                        <p>댓글을 작성하려면 로그인이 필요합니다.</p>
+                        <button class="btn btn-primary btn-sm" id="goToLoginBtn">
+                            로그인하기
+                        </button>
+                    </div>
+
+                    <!-- 댓글 목록 -->
+                    <div class="comments-list" id="commentsList">
+                        <!-- 댓글이 동적으로 추가됩니다 -->
+                    </div>
+
+                    <!-- 댓글 없음 상태 -->
+                    <div class="empty-comments" id="emptyComments" style="display: none">
+                        <p>첫 번째 댓글을 작성해보세요!</p>
+                    </div>
+                </section>
+            </section>
+        </main>
+
+        <footer-component></footer-component>
+
+        <!-- 삭제 확인 모달 -->
+        <div class="modal" id="deleteModal" style="display: none">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <h3>게시글 삭제</h3>
+                <p>정말로 이 게시글을 삭제하시겠습니까?</p>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="cancelDeleteBtn">취소</button>
+                    <button class="btn btn-danger" id="confirmDeleteBtn">삭제</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 스크립트 -->
+        <script type="module">
+            import '../js/components/index.js';
+            import '../js/pages/post-detail.page.js';
+        </script>
+    </body>
+</html>

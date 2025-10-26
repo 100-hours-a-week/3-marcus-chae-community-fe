@@ -1,45 +1,73 @@
-<html>
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>로그인</title>
+        <link rel="stylesheet" href="../css/base/common.css" />
+        <link rel="stylesheet" href="../css/components/button.css" />
+        <link rel="stylesheet" href="../css/components/input.css" />
+        <link rel="stylesheet" href="../css/components/toast.css" />
+        <link rel="stylesheet" href="../css/pages/login.css" />
+    </head>
 
-<head>
-    <title>로그인</title>
-    <link rel="stylesheet" href="../css/common.css">
-    <style>
-        main {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-    </style>
-</head>
+    <body>
+        <header-component></header-component>
 
-<body>
-    <header-component logged-in="false"></header-component>
+        <main>
+            <section class="login-section" aria-labelledby="login-title">
+                <h1 id="login-title">로그인</h1>
+                <form id="loginForm" aria-label="로그인 폼">
+                    <div class="input-block">
+                        <label for="email">이메일</label>
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="example@email.com"
+                            autocomplete="email"
+                            required
+                        />
+                        <span class="error-message"></span>
+                    </div>
 
-    <main>
+                    <div class="input-block">
+                        <label for="password">비밀번호</label>
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="비밀번호를 입력하세요"
+                            autocomplete="current-password"
+                            required
+                        />
+                        <span class="error-message"></span>
+                    </div>
 
-        <form id="loginForm">
-            <input-block label="이메일" type="email" input-id="email"></input-block>
-            <input-block label="비밀번호" type="password" input-id="password"></input-block>
-            <button id="loginButton" type="button">로그인</button>
-        </form>
-        <button id="toSignupPageButton">회원가입</button>
+                    <button
+                        id="loginButton"
+                        type="button"
+                        class="btn btn-primary btn-block"
+                        aria-label="로그인"
+                    >
+                        로그인
+                    </button>
+                </form>
+                <button
+                    id="toSignupPageButton"
+                    type="button"
+                    class="btn btn-link"
+                    aria-label="회원가입 페이지로 이동"
+                >
+                    계정이 없으신가요? 회원가입하기
+                </button>
+            </section>
+        </main>
+        <footer-component></footer-component>
 
-    </main>
-
-    <footer-component></footer-component>
-
-    <script src="../js/components.js"></script>
-    <script>
-        // input 요소에 접근
-        const email = document.getElementById("email");
-        const password = document.getElementById("password");
-        const loginButton = document.getElementById("loginButton");
-        const toSignupPageButton = document.getElementById("toSignupPageButton");
-
-        toSignupPageButton.addEventListener("click", () => {
-            location.href = "signup.html";
-        })
-    </script>
-</body>
-
+        <!-- 모듈 방식으로 스크립트 로드 -->
+        <script type="module">
+            import '../js/components/index.js';
+            import '../js/pages/login.page.js';
+            import '../js/dev/dev-helper.js'; // 개발 모드 - 프로덕션 배포 시 제거
+        </script>
+    </body>
 </html>

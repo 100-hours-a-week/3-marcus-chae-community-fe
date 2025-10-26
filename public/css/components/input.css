@@ -1,0 +1,210 @@
+/**
+ * 입력 필드 컴포넌트
+ * Input Block 컴포넌트 및 폼 요소 스타일을 정의합니다.
+ */
+
+/* ==================== Input Block Component ==================== */
+.input-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    margin-bottom: var(--spacing-4);
+}
+
+.input-block label {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+}
+
+.input-block label.required::after {
+    content: ' *';
+    color: var(--color-error);
+}
+
+/* ==================== Base Input ==================== */
+.input-block input,
+.input-block textarea,
+.input-block select {
+    width: 100%;
+    padding: var(--spacing-3);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+    color: var(--color-text-primary);
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-base);
+    outline: none;
+}
+
+.input-block input::placeholder,
+.input-block textarea::placeholder {
+    color: var(--color-text-disabled);
+}
+
+/* Focus State */
+.input-block input:focus,
+.input-block textarea:focus,
+.input-block select:focus {
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 var(--focus-ring-width) rgba(59, 130, 246, 0.1);
+}
+
+/* Hover State */
+.input-block input:hover:not(:disabled):not(:focus),
+.input-block textarea:hover:not(:disabled):not(:focus),
+.input-block select:hover:not(:disabled):not(:focus) {
+    border-color: var(--color-primary-400);
+}
+
+/* Disabled State */
+.input-block input:disabled,
+.input-block textarea:disabled,
+.input-block select:disabled {
+    background-color: var(--color-gray-100);
+    color: var(--color-text-disabled);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* ==================== Error State ==================== */
+.input-block input.error,
+.input-block textarea.error,
+.input-block select.error {
+    border-color: var(--color-error);
+}
+
+.input-block input.error:focus,
+.input-block textarea.error:focus,
+.input-block select.error:focus {
+    box-shadow: 0 0 0 var(--focus-ring-width) rgba(239, 68, 68, 0.1);
+}
+
+.error-message {
+    color: var(--color-error);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-normal);
+    min-height: 18px;
+    margin-top: calc(var(--spacing-1) * -1);
+}
+
+/* ==================== Success State ==================== */
+.input-block input.success,
+.input-block textarea.success,
+.input-block select.success {
+    border-color: var(--color-success);
+}
+
+.input-block input.success:focus,
+.input-block textarea.success:focus,
+.input-block select.success:focus {
+    box-shadow: 0 0 0 var(--focus-ring-width) rgba(16, 185, 129, 0.1);
+}
+
+.success-message {
+    color: var(--color-success);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-normal);
+    min-height: 18px;
+    margin-top: calc(var(--spacing-1) * -1);
+}
+
+/* ==================== Helper Text ==================== */
+.helper-text {
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-normal);
+    margin-top: calc(var(--spacing-1) * -1);
+}
+
+/* ==================== Input Sizes ==================== */
+.input-sm input,
+.input-sm textarea,
+.input-sm select {
+    padding: var(--spacing-2);
+    font-size: var(--font-size-xs);
+}
+
+.input-lg input,
+.input-lg textarea,
+.input-lg select {
+    padding: var(--spacing-4);
+    font-size: var(--font-size-base);
+}
+
+/* ==================== Textarea ==================== */
+.input-block textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* ==================== Input with Icon ==================== */
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon input {
+    padding-left: var(--spacing-10);
+}
+
+.input-icon {
+    position: absolute;
+    left: var(--spacing-3);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-tertiary);
+    pointer-events: none;
+}
+
+.input-with-icon.icon-right input {
+    padding-left: var(--spacing-3);
+    padding-right: var(--spacing-10);
+}
+
+.input-with-icon.icon-right .input-icon {
+    left: auto;
+    right: var(--spacing-3);
+}
+
+/* ==================== Checkbox & Radio ==================== */
+.input-block input[type='checkbox'],
+.input-block input[type='radio'] {
+    width: auto;
+    margin-right: var(--spacing-2);
+    cursor: pointer;
+}
+
+.input-block label.checkbox-label,
+.input-block label.radio-label {
+    display: flex;
+    align-items: center;
+    font-weight: var(--font-weight-normal);
+    cursor: pointer;
+}
+
+/* ==================== Form Group ==================== */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+    margin-bottom: var(--spacing-6);
+}
+
+.form-row {
+    display: flex;
+    gap: var(--spacing-4);
+}
+
+.form-row > .input-block {
+    flex: 1;
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+    }
+}

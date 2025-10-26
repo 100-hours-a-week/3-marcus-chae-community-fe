@@ -1,0 +1,458 @@
+/* ==================== Post Detail Page Styles ==================== */
+/* Note: 로딩, 상태, 모달 스타일은 components/ 폴더의 별도 파일로 분리됨 */
+
+/* ==================== Page Layout ==================== */
+.post-detail-section {
+    max-width: var(--container-md);
+    margin: 0 auto;
+    padding: var(--spacing-8) var(--spacing-5);
+    min-height: calc(100vh - 200px);
+}
+
+/* ==================== Post Container ==================== */
+.post-container {
+    background-color: var(--color-white);
+    border-radius: var(--radius-2xl);
+    padding: var(--spacing-8);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border-light);
+    margin-bottom: var(--spacing-8);
+}
+
+/* ==================== Post Header ==================== */
+.post-header {
+    margin-bottom: var(--spacing-8);
+    padding-bottom: var(--spacing-6);
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.post-title {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    line-height: var(--line-height-tight);
+    margin-bottom: var(--spacing-6);
+    word-break: keep-all;
+    overflow-wrap: break-word;
+}
+
+.post-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--spacing-4);
+}
+
+.post-author {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-base);
+}
+
+.author-icon {
+    font-size: var(--font-size-xl);
+}
+
+.author-name {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.post-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+}
+
+.post-date::after {
+    content: '·';
+    margin-left: var(--spacing-2);
+}
+
+.post-views {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.views-icon {
+    font-size: var(--font-size-base);
+}
+
+/* ==================== Post Actions ==================== */
+.post-actions {
+    display: flex;
+    gap: var(--spacing-2);
+    justify-content: flex-end;
+    margin-bottom: var(--spacing-6);
+}
+
+/* ==================== Post Content ==================== */
+.post-content {
+    font-size: var(--font-size-base);
+    color: var(--color-text-primary);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--spacing-8);
+    min-height: 200px;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+}
+
+/* 마크다운 콘텐츠 스타일링 */
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-top: var(--spacing-6);
+    margin-bottom: var(--spacing-4);
+    line-height: var(--line-height-tight);
+}
+
+.post-content h1 {
+    font-size: var(--font-size-2xl);
+}
+.post-content h2 {
+    font-size: var(--font-size-xl);
+}
+.post-content h3 {
+    font-size: var(--font-size-lg);
+}
+
+.post-content p {
+    margin-bottom: var(--spacing-4);
+}
+
+.post-content ul,
+.post-content ol {
+    margin-left: var(--spacing-6);
+    margin-bottom: var(--spacing-4);
+}
+
+.post-content li {
+    margin-bottom: var(--spacing-2);
+}
+
+.post-content a {
+    color: var(--color-primary-500);
+    text-decoration: underline;
+    transition: color var(--transition-base);
+}
+
+.post-content a:hover {
+    color: var(--color-primary-600);
+}
+
+.post-content code {
+    background-color: var(--color-gray-100);
+    padding: var(--spacing-1) var(--spacing-2);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+    color: var(--color-error);
+}
+
+.post-content pre {
+    background-color: var(--color-gray-900);
+    color: var(--color-gray-100);
+    padding: var(--spacing-4);
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+    margin-bottom: var(--spacing-4);
+}
+
+.post-content pre code {
+    background-color: transparent;
+    padding: 0;
+    color: inherit;
+}
+
+.post-content blockquote {
+    border-left: 4px solid var(--color-primary-500);
+    padding-left: var(--spacing-4);
+    margin-left: 0;
+    margin-bottom: var(--spacing-4);
+    color: var(--color-text-secondary);
+    font-style: italic;
+}
+
+.post-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+    margin: var(--spacing-4) 0;
+}
+
+/* ==================== Post Footer ==================== */
+.post-footer {
+    padding-top: var(--spacing-6);
+    border-top: 1px solid var(--color-border-light);
+}
+
+/* ==================== Comments Section ==================== */
+.comments-section {
+    background-color: var(--color-white);
+    border-radius: var(--radius-2xl);
+    padding: var(--spacing-8);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border-light);
+}
+
+.comments-header {
+    margin-bottom: var(--spacing-6);
+}
+
+.comments-title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.comment-count {
+    font-size: var(--font-size-xl);
+    color: var(--color-primary-500);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* ==================== Comment Form ==================== */
+.comment-form-container {
+    margin-bottom: var(--spacing-8);
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+}
+
+.comment-input {
+    width: 100%;
+    padding: var(--spacing-4);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-lg);
+    resize: vertical;
+    min-height: 100px;
+    transition: all var(--transition-base);
+    outline: none;
+}
+
+.comment-input::placeholder {
+    color: var(--color-text-disabled);
+}
+
+.comment-input:focus {
+    border-color: var(--color-primary-500);
+    background-color: var(--color-white);
+    box-shadow: 0 0 0 var(--focus-ring-width) rgba(59, 130, 246, 0.1);
+}
+
+.comment-form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comment-length {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+}
+
+/* ==================== Login Prompt ==================== */
+.login-prompt {
+    text-align: center;
+    padding: var(--spacing-8);
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-6);
+}
+
+.login-prompt p {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-4);
+}
+
+/* ==================== Comments List ==================== */
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+}
+
+/* ==================== Comment Item ==================== */
+.comment-item {
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-5);
+    transition: all var(--transition-base);
+}
+
+.comment-item:hover {
+    border-color: var(--color-primary-200);
+    box-shadow: var(--shadow-sm);
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-3);
+    gap: var(--spacing-3);
+}
+
+.comment-author {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-sm);
+}
+
+.comment-author-icon {
+    font-size: var(--font-size-base);
+}
+
+.comment-author-name {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.comment-date {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+}
+
+.comment-body {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--spacing-3);
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.comment-actions {
+    display: flex;
+    gap: var(--spacing-2);
+    justify-content: flex-end;
+    padding-top: var(--spacing-3);
+    border-top: 1px solid var(--color-border-light);
+}
+
+/* 댓글이 작성자 본인의 것일 때 강조 */
+.comment-item.is-author {
+    background-color: var(--color-primary-50);
+    border-color: var(--color-primary-200);
+}
+
+/* ==================== Empty Comments ==================== */
+.empty-comments {
+    text-align: center;
+    padding: var(--spacing-12);
+    color: var(--color-text-tertiary);
+}
+
+.empty-comments p {
+    font-size: var(--font-size-base);
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 768px) {
+    .post-detail-section {
+        padding: var(--spacing-6) var(--spacing-4);
+    }
+
+    .post-container,
+    .comments-section {
+        padding: var(--spacing-6);
+        border-radius: var(--radius-xl);
+    }
+
+    .post-title {
+        font-size: var(--font-size-2xl);
+    }
+
+    .post-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .post-content {
+        font-size: var(--font-size-sm);
+    }
+
+    .comments-title {
+        font-size: var(--font-size-xl);
+    }
+
+    .comment-item {
+        padding: var(--spacing-4);
+    }
+
+    .comment-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-2);
+    }
+}
+
+@media (max-width: 480px) {
+    .post-detail-section {
+        padding: var(--spacing-4) var(--spacing-3);
+    }
+
+    .post-container,
+    .comments-section {
+        padding: var(--spacing-4);
+    }
+
+    .post-title {
+        font-size: var(--font-size-xl);
+    }
+
+    .post-actions {
+        justify-content: stretch;
+    }
+
+    .post-actions .btn {
+        flex: 1;
+    }
+
+    .comment-item {
+        padding: var(--spacing-3);
+    }
+
+    .comment-body {
+        font-size: var(--font-size-xs);
+    }
+
+    .comment-actions {
+        flex-direction: column;
+    }
+
+    .comment-actions .btn {
+        width: 100%;
+    }
+
+    .comment-form-footer {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: var(--spacing-2);
+    }
+}

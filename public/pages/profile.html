@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>프로필</title>
+        <link rel="stylesheet" href="../css/base/common.css" />
+        <link rel="stylesheet" href="../css/components/button.css" />
+        <link rel="stylesheet" href="../css/components/input.css" />
+        <link rel="stylesheet" href="../css/components/loading.css" />
+        <link rel="stylesheet" href="../css/components/toast.css" />
+        <link rel="stylesheet" href="../css/pages/profile.css" />
+    </head>
+
+    <body>
+        <header-component></header-component>
+
+        <main>
+            <!-- 환영 섹션 -->
+            <section class="welcome-section">
+                <div class="welcome-content">
+                    <h1>프로필</h1>
+                    <p id="welcomeMessage">회원님의 정보를 관리할 수 있습니다.</p>
+                </div>
+            </section>
+
+            <!-- 프로필 컨테이너 -->
+            <div class="profile-container">
+                <!-- 로딩 인디케이터 -->
+                <div class="loading-indicator" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <p>정보를 불러오는 중...</p>
+                </div>
+
+                <!-- 프로필 콘텐츠 -->
+                <div class="profile-content" id="profileContent" style="display: none">
+                    <!-- 프로필 정보 카드 -->
+                    <section class="profile-info-section">
+                        <div class="section-header">
+                            <h2>프로필 정보</h2>
+                        </div>
+                        <div class="profile-card">
+                            <div class="profile-item">
+                                <span class="profile-label">닉네임</span>
+                                <span class="profile-value" id="profileNickname">-</span>
+                            </div>
+                            <div class="profile-item">
+                                <span class="profile-label">이메일</span>
+                                <span class="profile-value" id="profileEmail">-</span>
+                            </div>
+                            <div class="profile-item">
+                                <span class="profile-label">가입일</span>
+                                <span class="profile-value" id="profileCreatedAt">-</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 프로필 수정 섹션 -->
+                    <section class="profile-edit-section">
+                        <div class="section-header">
+                            <h2>프로필 수정</h2>
+                            <p class="section-description">닉네임과 이메일을 수정할 수 있습니다.</p>
+                        </div>
+                        <div class="edit-card">
+                            <form id="profileEditForm">
+                                <div class="input-block">
+                                    <label for="editNickname" class="required">닉네임</label>
+                                    <input
+                                        type="text"
+                                        id="editNickname"
+                                        name="nickname"
+                                        placeholder="닉네임을 입력하세요"
+                                        autocomplete="username"
+                                        required
+                                    />
+                                    <span class="error-message" id="nicknameError"></span>
+                                </div>
+
+                                <div class="input-block">
+                                    <label for="editEmail" class="required">이메일</label>
+                                    <input
+                                        type="email"
+                                        id="editEmail"
+                                        name="email"
+                                        placeholder="이메일을 입력하세요"
+                                        autocomplete="email"
+                                        required
+                                    />
+                                    <span class="error-message" id="emailError"></span>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary" id="profileEditBtn">
+                                        프로필 수정
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+
+                    <!-- 비밀번호 변경 섹션 -->
+                    <section class="password-change-section">
+                        <div class="section-header">
+                            <h2>비밀번호 변경</h2>
+                            <p class="section-description">
+                                보안을 위해 주기적으로 비밀번호를 변경해주세요.
+                            </p>
+                        </div>
+                        <div class="edit-card">
+                            <form id="passwordChangeForm">
+                                <div class="input-block">
+                                    <label for="currentPassword" class="required">현재 비밀번호</label>
+                                    <input
+                                        type="password"
+                                        id="currentPassword"
+                                        name="currentPassword"
+                                        placeholder="현재 비밀번호를 입력하세요"
+                                        autocomplete="current-password"
+                                        required
+                                    />
+                                    <span class="error-message" id="currentPasswordError"></span>
+                                </div>
+
+                                <div class="input-block">
+                                    <label for="newPassword" class="required">새 비밀번호</label>
+                                    <input
+                                        type="password"
+                                        id="newPassword"
+                                        name="newPassword"
+                                        placeholder="새 비밀번호를 입력하세요 (8자 이상)"
+                                        autocomplete="new-password"
+                                        required
+                                    />
+                                    <span class="error-message" id="newPasswordError"></span>
+                                </div>
+
+                                <div class="input-block">
+                                    <label for="confirmPassword" class="required">새 비밀번호 확인</label>
+                                    <input
+                                        type="password"
+                                        id="confirmPassword"
+                                        name="confirmPassword"
+                                        placeholder="새 비밀번호를 다시 입력하세요"
+                                        autocomplete="new-password"
+                                        required
+                                    />
+                                    <span class="error-message" id="confirmPasswordError"></span>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary" id="passwordChangeBtn">
+                                        비밀번호 변경
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+
+        <footer-component></footer-component>
+
+        <!-- 스크립트 -->
+        <script type="module">
+            import '../js/components/index.js';
+            import '../js/pages/profile.page.js';
+        </script>
+    </body>
+</html>

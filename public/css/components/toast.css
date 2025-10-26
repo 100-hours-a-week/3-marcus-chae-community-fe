@@ -1,0 +1,217 @@
+/**
+ * 토스트 알림 컴포넌트
+ * 사용자 알림을 위한 토스트 메시지 스타일을 정의합니다.
+ */
+
+/* ==================== Toast Container ==================== */
+.toast-container {
+    position: fixed;
+    top: var(--spacing-6);
+    right: var(--spacing-6);
+    z-index: var(--z-toast);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    max-width: 420px;
+    pointer-events: none;
+}
+
+/* ==================== Toast Base ==================== */
+.toast {
+    background: var(--color-white);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-4) var(--spacing-5);
+    box-shadow:
+        var(--shadow-md),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    min-width: 320px;
+    pointer-events: auto;
+    backdrop-filter: blur(10px);
+    animation: toastSlideIn var(--duration-slower) ease;
+    transform-origin: right center;
+    border: none;
+    transition: all var(--duration-normal) ease;
+}
+
+.toast:hover {
+    transform: translateY(-1px);
+    box-shadow:
+        var(--shadow-lg),
+        0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+/* ==================== Toast Variants ==================== */
+.toast.success {
+    background: linear-gradient(135deg, var(--color-white) 0%, var(--color-success-light) 100%);
+}
+
+.toast.error {
+    background: linear-gradient(135deg, var(--color-white) 0%, var(--color-error-light) 100%);
+}
+
+.toast.info {
+    background: linear-gradient(135deg, var(--color-white) 0%, var(--color-info-light) 100%);
+}
+
+.toast.warning {
+    background: linear-gradient(135deg, var(--color-white) 0%, var(--color-warning-light) 100%);
+}
+
+/* ==================== Toast Icon ==================== */
+.toast-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    flex-shrink: 0;
+    transition: transform var(--duration-normal) ease;
+}
+
+.toast:hover .toast-icon {
+    transform: scale(1.05);
+}
+
+.toast.success .toast-icon {
+    background: var(--color-success);
+    color: var(--color-white);
+}
+
+.toast.error .toast-icon {
+    background: var(--color-error);
+    color: var(--color-white);
+}
+
+.toast.info .toast-icon {
+    background: var(--color-info);
+    color: var(--color-white);
+}
+
+.toast.warning .toast-icon {
+    background: var(--color-warning);
+    color: var(--color-white);
+}
+
+/* ==================== Toast Content ==================== */
+.toast-content {
+    flex: 1;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+    font-weight: var(--font-weight-medium);
+}
+
+/* ==================== Toast Close Button ==================== */
+.toast-close {
+    background: rgba(107, 114, 128, 0.1);
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--color-gray-500);
+    cursor: pointer;
+    font-size: var(--font-size-lg);
+    padding: 0;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all var(--duration-normal) ease;
+    font-weight: var(--font-weight-medium);
+}
+
+.toast-close:hover {
+    background: rgba(107, 114, 128, 0.2);
+    color: var(--color-gray-700);
+    transform: scale(1.05);
+}
+
+.toast-close:active {
+    transform: scale(0.95);
+}
+
+/* ==================== Toast Animations ==================== */
+@keyframes toastSlideIn {
+    0% {
+        transform: translateX(calc(100% + var(--spacing-6)));
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes toastSlideOut {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(calc(100% + var(--spacing-6)));
+        opacity: 0;
+    }
+}
+
+.toast.hiding {
+    animation: toastSlideOut var(--duration-slower) ease forwards;
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 768px) {
+    .toast-container {
+        left: var(--spacing-4);
+        right: var(--spacing-4);
+        top: var(--spacing-4);
+        max-width: none;
+    }
+
+    .toast {
+        min-width: auto;
+        width: 100%;
+    }
+
+    @keyframes toastSlideIn {
+        0% {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        100% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes toastSlideOut {
+        0% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+    }
+}
+
+/* ==================== Accessibility ==================== */
+@media (prefers-reduced-motion: reduce) {
+    .toast {
+        animation: none;
+    }
+
+    .toast-icon,
+    .toast-close {
+        transition: none;
+    }
+
+    .toast:hover .toast-icon {
+        transform: none;
+    }
+}
