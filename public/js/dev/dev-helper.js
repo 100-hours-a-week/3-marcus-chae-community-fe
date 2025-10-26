@@ -15,6 +15,7 @@ class DevHelper {
             signup: {
                 email: 'test@example.com',
                 password: 'Test1234!',
+                passwordConfirm: 'Test1234!',
                 nickname: '테스트유저',
             },
         };
