@@ -42,6 +42,7 @@ async function request(endpoint, options = {}) {
             'Content-Type': 'application/json',
             ...options.headers,
         },
+        credentials: 'include', // 쿠키 기반 인증을 위해 필수
         ...options,
     };
 

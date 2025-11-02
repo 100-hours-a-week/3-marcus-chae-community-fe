@@ -6,7 +6,7 @@
 import { validateEmail } from '../utils/validators.js';
 import { login } from '../services/auth.service.js';
 import { navigateTo, ROUTES } from '../utils/router.js';
-import authState from '../state/auth.state.js';
+import { authState } from '../state/auth.state.js';
 import toast from '../utils/toast.js';
 import { showInputError, hideInputError } from '../utils/form-helpers.js';
 
@@ -136,10 +136,9 @@ class LoginPage {
 
             if (response.success) {
                 // AuthState 업데이트
-                authState.login(
-                    response.data.user || { email: credentials.email },
-                    response.data.token
-                );
+                // response.data가 직접 사용자 정보 (userId, email, nickname)
+                // 쿠키 기반 인증이므로 token 없음
+                authState.login(response.data);
 
                 toast.success('로그인되었습니다!');
 

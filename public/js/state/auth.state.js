@@ -145,7 +145,8 @@ class AuthState {
 // 싱글톤 인스턴스 생성 및 export
 const authState = new AuthState();
 
-export default authState;
+// Named export for modules importing { authState }
+export { authState };
 
 // 편의 함수들
 export const subscribe = (observer) => authState.subscribe(observer);

@@ -3,27 +3,30 @@
  * 페이지 상단 헤더 - 로그인 상태에 따라 다른 UI 표시
  */
 
-import authState from '../state/auth.state.js';
+import { authState } from '../state/auth.state.js';
 import { ROUTES, navigateTo } from '../utils/router.js';
 import toast from '../utils/toast.js';
 
 class HeaderComponent extends HTMLElement {
     constructor() {
         super();
-        this.unsubscribe = null;
+        this.authCallback = null;
     }
 
     connectedCallback() {
-        // 인증 상태 구독
-        this.unsubscribe = authState.subscribe((state) => {
+        // 콜백 함수를 저장하여 구독/해제에 사용
+        this.authCallback = (state) => {
             this.render(state.isLoggedIn, state.user);
-        });
+        };
+
+        // 인증 상태 구독
+        authState.subscribe(this.authCallback);
     }
 
     disconnectedCallback() {
         // 컴포넌트 제거 시 구독 해제
-        if (this.unsubscribe) {
-            authState.unsubscribe(this.unsubscribe);
+        if (this.authCallback) {
+            authState.unsubscribe(this.authCallback);
         }
     }
 

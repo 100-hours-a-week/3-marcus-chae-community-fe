@@ -3,7 +3,7 @@
  * 게시글 목록 조회, 상세 조회 등을 담당합니다.
  */
 
-import { get } from './api.service.js';
+import { get, post, patch, del } from './api.service.js';
 
 /**
  * 게시글 목록 조회 (커서 기반 페이지네이션)
@@ -21,6 +21,75 @@ export async function fetchPosts(cursor = null, size = 10) {
     }
 
     return await get('/posts', params);
+}
+
+/**
+ * 게시글 작성
+ * @param {string} title - 게시글 제목 (최대 26자)
+ * @param {string} content - 게시글 내용 (최대 15000자)
+ * @returns {Promise<ApiResponse>}
+ */
+export async function createPost(title, content) {
+    const response = await post('/posts', {
+        title: title,
+        content: content,
+    });
+
+    if (!response.success) {
+        console.error('게시글 작성 실패:', response.error);
+    }
+
+    return response;
+}
+
+/**
+ * 게시글 상세 조회
+ * @param {number} id - 게시글 ID
+ * @returns {Promise<ApiResponse>}
+ */
+export async function getPostById(id) {
+    const response = await get(`/posts/${id}`);
+
+    if (!response.success) {
+        console.error('게시글 조회 실패:', response.error);
+    }
+
+    return response;
+}
+
+/**
+ * 게시글 수정
+ * @param {number} id - 게시글 ID
+ * @param {string} title - 수정할 제목 (최대 26자)
+ * @param {string} content - 수정할 내용 (최대 15000자)
+ * @returns {Promise<ApiResponse>}
+ */
+export async function updatePost(id, title, content) {
+    const response = await patch(`/posts/${id}`, {
+        title: title,
+        content: content,
+    });
+
+    if (!response.success) {
+        console.error('게시글 수정 실패:', response.error);
+    }
+
+    return response;
+}
+
+/**
+ * 게시글 삭제
+ * @param {number} id - 게시글 ID
+ * @returns {Promise<ApiResponse>}
+ */
+export async function deletePost(id) {
+    const response = await del(`/posts/${id}`);
+
+    if (!response.success) {
+        console.error('게시글 삭제 실패:', response.error);
+    }
+
+    return response;
 }
 
 /**
@@ -63,6 +132,10 @@ export function transformPostsResponse(response) {
 
 export default {
     fetchPosts,
+    createPost,
+    getPostById,
+    updatePost,
+    deletePost,
     transformPost,
     transformPostsResponse,
 };

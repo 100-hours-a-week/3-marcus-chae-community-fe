@@ -99,3 +99,87 @@ export function validateNickname(nickname) {
         message: '',
     };
 }
+
+/**
+ * 게시글 제목 유효성 검증
+ * @param {string} title - 검증할 제목
+ * @returns {Object} { isValid: boolean, message: string }
+ */
+export function validatePostTitle(title) {
+    if (!title || title.trim() === '') {
+        return {
+            isValid: false,
+            message: '제목을 입력해주세요.',
+        };
+    }
+
+    const trimmedTitle = title.trim();
+
+    if (trimmedTitle.length > 26) {
+        return {
+            isValid: false,
+            message: '제목은 최대 26자까지 입력 가능합니다.',
+        };
+    }
+
+    return {
+        isValid: true,
+        message: '',
+    };
+}
+
+/**
+ * 게시글 내용 유효성 검증
+ * @param {string} content - 검증할 내용
+ * @returns {Object} { isValid: boolean, message: string }
+ */
+export function validatePostContent(content) {
+    if (!content || content.trim() === '') {
+        return {
+            isValid: false,
+            message: '내용을 입력해주세요.',
+        };
+    }
+
+    const trimmedContent = content.trim();
+
+    if (trimmedContent.length > 15000) {
+        return {
+            isValid: false,
+            message: '내용은 최대 15000자까지 입력 가능합니다.',
+        };
+    }
+
+    return {
+        isValid: true,
+        message: '',
+    };
+}
+
+/**
+ * 댓글 내용 유효성 검증
+ * @param {string} content - 검증할 댓글 내용
+ * @returns {Object} { isValid: boolean, message: string }
+ */
+export function validateCommentContent(content) {
+    if (!content || content.trim() === '') {
+        return {
+            isValid: false,
+            message: '댓글을 입력해주세요.',
+        };
+    }
+
+    const trimmedContent = content.trim();
+
+    if (trimmedContent.length > 500) {
+        return {
+            isValid: false,
+            message: '댓글은 최대 500자까지 입력 가능합니다.',
+        };
+    }
+
+    return {
+        isValid: true,
+        message: '',
+    };
+}

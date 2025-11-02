@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>게시글 작성</title>
+        <link rel="stylesheet" href="../css/base/common.css" />
+        <link rel="stylesheet" href="../css/components/button.css" />
+        <link rel="stylesheet" href="../css/components/input.css" />
+        <link rel="stylesheet" href="../css/components/toast.css" />
+        <link rel="stylesheet" href="../css/pages/post-form.css" />
+    </head>
+
+    <body>
+        <header-component></header-component>
+
+        <main>
+            <section class="post-form-section" aria-labelledby="post-form-title">
+                <h1 id="post-form-title">게시글 작성</h1>
+                <form id="postForm" aria-label="게시글 작성 폼">
+                    <div class="input-block">
+                        <label for="title">제목</label>
+                        <input
+                            type="text"
+                            id="title"
+                            placeholder="제목을 입력하세요 (최대 26자)"
+                            maxlength="26"
+                            required
+                        />
+                        <span class="char-count"><span id="titleCount">0</span>/26</span>
+                        <span class="error-message"></span>
+                    </div>
+
+                    <div class="input-block">
+                        <label for="content">내용</label>
+                        <textarea
+                            id="content"
+                            placeholder="내용을 입력하세요 (최대 15000자)"
+                            maxlength="15000"
+                            rows="15"
+                            required
+                        ></textarea>
+                        <span class="char-count"><span id="contentCount">0</span>/15000</span>
+                        <span class="error-message"></span>
+                    </div>
+
+                    <div class="button-group">
+                        <button
+                            id="cancelButton"
+                            type="button"
+                            class="btn btn-secondary"
+                            aria-label="취소"
+                        >
+                            취소
+                        </button>
+                        <button
+                            id="submitButton"
+                            type="button"
+                            class="btn btn-primary"
+                            aria-label="작성"
+                            disabled
+                        >
+                            작성
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </main>
+        <footer-component></footer-component>
+
+        <!-- 모듈 방식으로 스크립트 로드 -->
+        <script type="module">
+            import '../js/components/index.js';
+            import '../js/pages/post-form.page.js';
+            import '../js/dev/dev-helper.js'; // 개발 모드 - 프로덕션 배포 시 제거
+        </script>
+    </body>
+</html>

@@ -3,12 +3,13 @@
  * 환영 섹션 및 로그인 상태에 따른 UI 관리
  */
 
-import authState from '../state/auth.state.js';
-import { ROUTES } from '../utils/router.js';
+import { authState } from '../state/auth.state.js';
+import { ROUTES, navigateTo } from '../utils/router.js';
 
 class HomePage {
     constructor() {
         this.elements = {};
+        this.authCallback = null;
         this.init();
     }
 
@@ -45,10 +46,13 @@ class HomePage {
      * 인증 상태 구독 설정
      */
     setupAuthStateSubscription() {
-        // 로그인 상태에 따른 UI 업데이트
-        authState.subscribe((state) => {
+        // 콜백 함수를 저장하여 구독에 사용
+        this.authCallback = (state) => {
             this.updateUIByAuthState(state);
-        });
+        };
+
+        // 로그인 상태에 따른 UI 업데이트
+        authState.subscribe(this.authCallback);
     }
 
     /**
@@ -121,8 +125,7 @@ class HomePage {
      * 게시글 작성 처리
      */
     handleCreatePost() {
-        // TODO: 게시글 작성 페이지로 이동
-        alert('게시글 작성 페이지로 이동 (구현 예정)');
+        navigateTo('/pages/post-form.html');
     }
 }
 

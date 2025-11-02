@@ -3,7 +3,7 @@
  * 회원가입, 로그인, 로그아웃 등의 인증 기능을 제공합니다.
  */
 
-import { post, get } from './api.service.js';
+import { post, get, patch, del } from './api.service.js';
 import { authStorage } from '../utils/storage.js';
 
 /**
@@ -36,19 +36,15 @@ export async function signup(userData) {
  * @returns {Promise<ApiResponse>}
  */
 export async function login(credentials) {
-    const response = await post('/auth/login', {
+    const response = await post('/auth', {
         email: credentials.email,
         password: credentials.password,
     });
 
     if (response.success && response.data) {
-        // 토큰과 사용자 정보 저장
-        if (response.data.token) {
-            authStorage.setToken(response.data.token);
-        }
-        if (response.data.user) {
-            authStorage.setUserInfo(response.data.user);
-        }
+        // 쿠키 기반 인증이므로 사용자 정보만 저장
+        // response.data가 직접 사용자 정보 (userId, email, nickname)
+        authStorage.setUserInfo(response.data);
         authStorage.setLoginStatus(true);
     } else {
         console.error('로그인 실패:', response.error);
@@ -62,7 +58,7 @@ export async function login(credentials) {
  * @returns {Promise<ApiResponse>}
  */
 export async function logout() {
-    const response = await post('/auth/logout');
+    const response = await del('/auth');
 
     // 로컬 스토리지 정리
     authStorage.clearAuth();
@@ -75,16 +71,8 @@ export async function logout() {
  * @returns {Promise<ApiResponse>}
  */
 export async function getCurrentUser() {
-    const token = authStorage.getToken();
-
-    if (!token) {
-        return {
-            success: false,
-            error: '인증 토큰이 없습니다.',
-        };
-    }
-
-    const response = await get('/auth/me');
+    // 쿠키 기반 인증이므로 토큰 체크 불필요
+    const response = await get('/users/me');
 
     if (response.success && response.data) {
         authStorage.setUserInfo(response.data);
@@ -96,13 +84,13 @@ export async function getCurrentUser() {
 /**
  * 비밀번호 변경
  * @param {Object} passwordData - 비밀번호 정보
- * @param {string} passwordData.currentPassword - 현재 비밀번호
+ * @param {string} passwordData.originalPassword - 현재 비밀번호
  * @param {string} passwordData.newPassword - 새 비밀번호
  * @returns {Promise<ApiResponse>}
  */
 export async function changePassword(passwordData) {
-    const response = await post('/auth/change-password', {
-        currentPassword: passwordData.currentPassword,
+    const response = await patch('/users/me/password', {
+        originalPassword: passwordData.originalPassword,
         newPassword: passwordData.newPassword,
     });
 
@@ -118,13 +106,32 @@ export async function changePassword(passwordData) {
  * @returns {Promise<ApiResponse>}
  */
 export async function deleteAccount() {
-    const response = await post('/auth/delete-account');
+    const response = await del('/users');
 
     if (response.success) {
         // 로컬 스토리지 정리
         authStorage.clearAuth();
     } else {
         console.error('회원 탈퇴 실패:', response.error);
+    }
+
+    return response;
+}
+
+/**
+ * 닉네임 변경
+ * @param {string} nickname - 새 닉네임
+ * @returns {Promise<ApiResponse>}
+ */
+export async function updateNickname(nickname) {
+    const response = await patch('/users/me/nickname', {
+        nickname: nickname,
+    });
+
+    if (response.success && response.data) {
+        authStorage.setUserInfo(response.data);
+    } else {
+        console.error('닉네임 변경 실패:', response.error);
     }
 
     return response;
@@ -155,9 +162,10 @@ export async function checkNicknameDuplicate(nickname) {
  * @returns {boolean}
  */
 export function isLoggedIn() {
-    const token = authStorage.getToken();
+    // 쿠키 기반 인증이므로 token 체크 불필요
     const loginStatus = authStorage.getLoginStatus();
-    return !!(token && loginStatus);
+    const userInfo = authStorage.getUserInfo();
+    return !!(loginStatus && userInfo);
 }
 
 export default {
@@ -166,6 +174,7 @@ export default {
     logout,
     getCurrentUser,
     changePassword,
+    updateNickname,
     deleteAccount,
     checkEmailDuplicate,
     checkNicknameDuplicate,

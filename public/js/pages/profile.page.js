@@ -3,10 +3,11 @@
  * 사용자 프로필 정보 조회 및 수정을 관리합니다.
  */
 
-import { validateEmail, validatePassword } from '../utils/validators.js';
+import { validatePassword, validateNickname } from '../utils/validators.js';
 import { showInputError, hideInputError } from '../utils/form-helpers.js';
+import { getCurrentUser, updateNickname, changePassword } from '../services/auth.service.js';
 import toast from '../utils/toast.js';
-import authState from '../state/auth.state.js';
+import { authState } from '../state/auth.state.js';
 import { navigateTo, ROUTES } from '../utils/router.js';
 
 class ProfilePage {
@@ -35,7 +36,8 @@ class ProfilePage {
      */
     setup() {
         // 로그인 확인
-        if (!authState.checkLoginStatus()) {
+        const state = authState.getState();
+        if (!state.isLoggedIn) {
             toast.error('로그인이 필요합니다.');
             navigateTo(ROUTES.LOGIN);
             return;
@@ -81,20 +83,17 @@ class ProfilePage {
             // 로딩 표시
             this.showLoading();
 
-            // TODO: 실제 API 호출은 나중에 구현
-            // const response = await getCurrentUser();
+            // 실제 API 호출
+            const response = await getCurrentUser();
 
-            // 더미 데이터로 표시
-            setTimeout(() => {
-                const dummyData = {
-                    nickname: '테스트유저',
-                    email: 'test@example.com',
-                    createdAt: '2025-01-15',
-                };
-
-                this.displayProfileData(dummyData);
+            if (!response.success) {
+                toast.error(response.error || '프로필 정보를 불러오는데 실패했습니다.');
                 this.hideLoading();
-            }, 500);
+                return;
+            }
+
+            this.displayProfileData(response.data);
+            this.hideLoading();
         } catch (error) {
             console.error('프로필 로드 에러:', error);
             toast.error('프로필 정보를 불러오는데 실패했습니다.');
@@ -110,11 +109,22 @@ class ProfilePage {
         // 프로필 정보 표시
         this.elements.profileNickname.textContent = data.nickname || '-';
         this.elements.profileEmail.textContent = data.email || '-';
-        this.elements.profileCreatedAt.textContent = this.formatDate(data.createdAt) || '-';
 
-        // 수정 폼에 현재 값 설정
+        // createdAt이 있으면 표시, 없으면 숨김
+        if (data.createdAt && this.elements.profileCreatedAt) {
+            this.elements.profileCreatedAt.textContent = this.formatDate(data.createdAt);
+        } else if (this.elements.profileCreatedAt) {
+            this.elements.profileCreatedAt.textContent = '-';
+        }
+
+        // 수정 폼에 현재 값 설정 (닉네임만 수정 가능)
         this.elements.editNickname.value = data.nickname || '';
-        this.elements.editEmail.value = data.email || '';
+
+        // 이메일은 읽기 전용으로 설정
+        if (this.elements.editEmail) {
+            this.elements.editEmail.value = data.email || '';
+            this.elements.editEmail.disabled = true;
+        }
     }
 
     /**
@@ -180,30 +190,17 @@ class ProfilePage {
      * @returns {boolean} 검증 성공 여부
      */
     validateProfileEdit() {
-        let isValid = true;
-
-        // 닉네임 검증
+        // 닉네임 검증만 수행 (이메일은 수정 불가)
         const nickname = this.elements.editNickname.value.trim();
-        if (!nickname) {
-            showInputError('editNickname', '닉네임을 입력해주세요.');
-            isValid = false;
-        } else if (nickname.length < 2 || nickname.length > 20) {
-            showInputError('editNickname', '닉네임은 2자 이상 20자 이하로 입력해주세요.');
-            isValid = false;
-        } else {
-            hideInputError('editNickname');
-        }
+        const validation = validateNickname(nickname);
 
-        // 이메일 검증
-        const emailValidation = validateEmail(this.elements.editEmail.value.trim());
-        if (!emailValidation.isValid) {
-            showInputError('editEmail', emailValidation.message);
-            isValid = false;
+        if (!validation.isValid) {
+            showInputError(this.elements.editNickname, validation.message);
+            return false;
         } else {
-            hideInputError('editEmail');
+            hideInputError(this.elements.editNickname);
+            return true;
         }
-
-        return isValid;
     }
 
     /**
@@ -215,34 +212,34 @@ class ProfilePage {
 
         // 현재 비밀번호 검증
         if (!this.elements.currentPassword.value) {
-            showInputError('currentPassword', '현재 비밀번호를 입력해주세요.');
+            showInputError(this.elements.currentPassword, '현재 비밀번호를 입력해주세요.');
             isValid = false;
         } else {
-            hideInputError('currentPassword');
+            hideInputError(this.elements.currentPassword);
         }
 
         // 새 비밀번호 검증
         const newPasswordValidation = validatePassword(this.elements.newPassword.value);
         if (!newPasswordValidation.isValid) {
-            showInputError('newPassword', newPasswordValidation.message);
+            showInputError(this.elements.newPassword, newPasswordValidation.message);
             isValid = false;
         } else {
-            hideInputError('newPassword');
+            hideInputError(this.elements.newPassword);
         }
 
         // 비밀번호 확인 검증
         if (this.elements.newPassword.value !== this.elements.confirmPassword.value) {
-            showInputError('confirmPassword', '새 비밀번호가 일치하지 않습니다.');
+            showInputError(this.elements.confirmPassword, '새 비밀번호가 일치하지 않습니다.');
             isValid = false;
         } else {
-            hideInputError('confirmPassword');
+            hideInputError(this.elements.confirmPassword);
         }
 
         return isValid;
     }
 
     /**
-     * 프로필 수정 처리
+     * 프로필 수정 처리 (닉네임만 수정)
      */
     async handleProfileEdit() {
         try {
@@ -255,30 +252,33 @@ class ProfilePage {
             this.elements.profileEditBtn.disabled = true;
             this.elements.profileEditBtn.textContent = '수정 중...';
 
-            const profileData = {
-                nickname: this.elements.editNickname.value.trim(),
-                email: this.elements.editEmail.value.trim(),
-            };
+            const nickname = this.elements.editNickname.value.trim();
 
-            // TODO: 실제 API 호출은 나중에 구현
-            // const response = await updateProfile(profileData);
+            // 실제 API 호출
+            const response = await updateNickname(nickname);
 
-            // 더미 응답
-            setTimeout(() => {
-                toast.success('프로필이 수정되었습니다.');
-                this.displayProfileData(profileData);
+            if (response.success) {
+                toast.success('닉네임이 수정되었습니다.');
 
-                // 버튼 다시 활성화
-                this.elements.profileEditBtn.disabled = false;
-                this.elements.profileEditBtn.textContent = '프로필 수정';
-            }, 1000);
-        } catch (error) {
-            console.error('프로필 수정 에러:', error);
-            toast.error('프로필 수정 중 오류가 발생했습니다.');
+                // authState 업데이트 (response.data에 MyProfileResponse가 있음)
+                authState.updateUser(response.data);
+
+                // 화면 업데이트
+                this.displayProfileData(response.data);
+            } else {
+                toast.error(response.error || '닉네임 수정에 실패했습니다.');
+            }
 
             // 버튼 다시 활성화
             this.elements.profileEditBtn.disabled = false;
-            this.elements.profileEditBtn.textContent = '프로필 수정';
+            this.elements.profileEditBtn.textContent = '닉네임 수정';
+        } catch (error) {
+            console.error('닉네임 수정 에러:', error);
+            toast.error('닉네임 수정 중 오류가 발생했습니다.');
+
+            // 버튼 다시 활성화
+            this.elements.profileEditBtn.disabled = false;
+            this.elements.profileEditBtn.textContent = '닉네임 수정';
         }
     }
 
@@ -297,22 +297,23 @@ class ProfilePage {
             this.elements.passwordChangeBtn.textContent = '변경 중...';
 
             const passwordData = {
-                currentPassword: this.elements.currentPassword.value,
+                originalPassword: this.elements.currentPassword.value,
                 newPassword: this.elements.newPassword.value,
             };
 
-            // TODO: 실제 API 호출은 나중에 구현
-            // const response = await changePassword(passwordData);
+            // 실제 API 호출
+            const response = await changePassword(passwordData);
 
-            // 더미 응답
-            setTimeout(() => {
+            if (response.success) {
                 toast.success('비밀번호가 변경되었습니다.');
                 this.elements.passwordChangeForm.reset();
+            } else {
+                toast.error(response.error || '비밀번호 변경에 실패했습니다.');
+            }
 
-                // 버튼 다시 활성화
-                this.elements.passwordChangeBtn.disabled = false;
-                this.elements.passwordChangeBtn.textContent = '비밀번호 변경';
-            }, 1000);
+            // 버튼 다시 활성화
+            this.elements.passwordChangeBtn.disabled = false;
+            this.elements.passwordChangeBtn.textContent = '비밀번호 변경';
         } catch (error) {
             console.error('비밀번호 변경 에러:', error);
             toast.error('비밀번호 변경 중 오류가 발생했습니다.');

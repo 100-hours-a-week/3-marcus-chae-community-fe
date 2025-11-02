@@ -1,0 +1,37 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": [
+          {
+            "group": ["**/state/auth.state.js"],
+            "importNames": ["default"],
+            "message": "authState는 named import로 가져오세요. 예: import { authState } from '../state/auth.state.js'"
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["public/js/state/auth.state.js"],
+      "rules": {
+        "no-restricted-exports": [
+          "error",
+          { "restrictedNamedExports": ["default"] }
+        ]
+      }
+    }
+  ]
+}

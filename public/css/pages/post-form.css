@@ -1,0 +1,73 @@
+/* ==================== Post Form Page Styles ==================== */
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--spacing-10) var(--spacing-5);
+}
+
+.post-form-section {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+}
+
+.post-form-section h1 {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-4);
+}
+
+#postForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+}
+
+/* 텍스트 영역 스타일 */
+#content {
+    resize: vertical;
+    min-height: 200px;
+    font-family: inherit;
+    line-height: 1.6;
+}
+
+/* 글자 수 표시 */
+.char-count {
+    display: block;
+    text-align: right;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-top: var(--spacing-1);
+}
+
+/* 버튼 그룹 */
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-3);
+    margin-top: var(--spacing-5);
+}
+
+.button-group .btn {
+    min-width: 100px;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .post-form-section {
+        max-width: 100%;
+    }
+
+    .button-group {
+        flex-direction: column-reverse;
+    }
+
+    .button-group .btn {
+        width: 100%;
+    }
+}
