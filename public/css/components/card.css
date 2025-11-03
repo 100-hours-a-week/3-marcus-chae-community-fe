@@ -1,0 +1,56 @@
+/* ==================== Card Component ==================== */
+
+/**
+ * 범용 카드 컴포넌트
+ * 콘텐츠를 담는 흰색 배경의 컨테이너
+ */
+.card {
+    background-color: var(--color-white);
+    border-radius: var(--radius-2xl);
+    padding: var(--spacing-8);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-border-light);
+}
+
+/* ==================== Variations ==================== */
+
+/* 작은 카드 */
+.card.sm {
+    padding: var(--spacing-6);
+    border-radius: var(--radius-xl);
+}
+
+/* 큰 카드 */
+.card.lg {
+    padding: var(--spacing-10);
+}
+
+/* 호버 효과가 있는 카드 */
+.card.hoverable {
+    transition: all var(--transition-base);
+    cursor: pointer;
+}
+
+.card.hoverable:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary-200);
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 768px) {
+    .card {
+        padding: var(--spacing-6);
+        border-radius: var(--radius-xl);
+    }
+
+    .card.sm {
+        padding: var(--spacing-4);
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: var(--spacing-4);
+    }
+}

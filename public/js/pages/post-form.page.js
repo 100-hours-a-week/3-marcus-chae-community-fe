@@ -7,6 +7,7 @@ import { validatePostTitle, validatePostContent } from '../utils/validators.js';
 import { createPost, getPostById, updatePost } from '../services/posts.service.js';
 import { navigateTo, ROUTES } from '../utils/router.js';
 import toast from '../utils/toast.js';
+import modal from '../utils/modal.js';
 import { showInputError, hideInputError } from '../utils/form-helpers.js';
 
 class PostFormPage {
@@ -283,12 +284,19 @@ class PostFormPage {
     /**
      * 취소 처리
      */
-    handleCancel() {
+    async handleCancel() {
         // 내용이 입력되어 있으면 확인
         const hasContent = this.elements.title.value.trim() || this.elements.content.value.trim();
 
         if (hasContent) {
-            const confirmed = confirm('작성 중인 내용이 사라집니다. 정말 취소하시겠습니까?');
+            const confirmed = await modal.confirm({
+                title: '작성 취소',
+                message: '작성 중인 내용이 사라집니다. 정말 취소하시겠습니까?',
+                variant: 'warning',
+                confirmText: '취소',
+                cancelText: '계속 작성',
+            });
+
             if (!confirmed) {
                 return;
             }

@@ -1,0 +1,40 @@
+/* ==================== Divider Component ==================== */
+
+/**
+ * 섹션 구분선
+ * 그라데이션으로 양쪽 끝이 부드럽게 페이드되는 수평선
+ */
+.divider {
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        var(--color-border-medium) 20%,
+        var(--color-border-medium) 80%,
+        transparent
+    );
+    margin: var(--spacing-6) 0;
+}
+
+/* ==================== Variations ==================== */
+
+/* 간격 크게 */
+.divider.lg {
+    margin: var(--spacing-8) 0;
+}
+
+/* 간격 작게 */
+.divider.sm {
+    margin: var(--spacing-4) 0;
+}
+
+/* 진한 색상 */
+.divider.dark {
+    background: linear-gradient(
+        to right,
+        transparent,
+        var(--color-border-dark) 20%,
+        var(--color-border-dark) 80%,
+        transparent
+    );
+}

@@ -5,3 +5,5 @@
 
 import './header.component.js';
 import './footer.component.js';
+import './modal-confirm.component.js';
+import './modal-input.component.js';

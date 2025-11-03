@@ -7,6 +7,7 @@ import { getPostById, deletePost } from '../services/posts.service.js';
 import { createComment, updateComment, deleteComment } from '../services/comments.service.js';
 import { authState } from '../state/auth.state.js';
 import toast from '../utils/toast.js';
+import modal from '../utils/modal.js';
 import { validateCommentContent } from '../utils/validators.js';
 
 // ==================== 상태 관리 ====================
@@ -37,7 +38,7 @@ const commentsList = document.getElementById('commentsList');
 const emptyComments = document.getElementById('emptyComments');
 
 // ==================== 게시글 로드 ====================
-async function loadPost() {
+async function loadPost(newCommentId = null) {
     showLoading(true);
     hideError();
     hidePost();
@@ -62,7 +63,7 @@ async function loadPost() {
 
         currentPost = response.data;
 
-        renderPost(currentPost);
+        renderPost(currentPost, newCommentId);
         showPost();
     } catch (error) {
         console.error('게시글을 불러오는 중 오류가 발생했습니다:', error);
@@ -73,7 +74,7 @@ async function loadPost() {
 }
 
 // ==================== 게시글 렌더링 ====================
-function renderPost(post) {
+function renderPost(post, newCommentId = null) {
     postTitle.textContent = post.title;
     authorName.textContent = post.author.nickname;
     postDate.textContent = formatDate(post.createdAt);
@@ -98,8 +99,8 @@ function renderPost(post) {
     // 댓글 섹션 표시
     commentsSection.style.display = 'block';
 
-    // 댓글 렌더링
-    renderComments(post.comments || []);
+    // 댓글 렌더링 (새 댓글 ID 전달)
+    renderComments(post.comments || [], newCommentId);
 
     // 댓글 작성 폼 표시/숨김 (위에서 선언한 currentUser 재사용)
     if (currentUser.isLoggedIn) {
@@ -167,7 +168,14 @@ function handleEditPost() {
 async function handleDeletePost() {
     if (!currentPost) return;
 
-    const confirmed = confirm('정말로 이 게시글을 삭제하시겠습니까?');
+    const confirmed = await modal.confirm({
+        title: '게시글 삭제',
+        message: '정말로 이 게시글을 삭제하시겠습니까?',
+        variant: 'danger',
+        confirmText: '삭제',
+        cancelText: '취소',
+    });
+
     if (!confirmed) return;
 
     try {
@@ -187,9 +195,42 @@ async function handleDeletePost() {
 
 // ==================== 댓글 관련 함수 ====================
 /**
- * 댓글 목록 렌더링
+ * 단일 댓글 DOM 생성
+ * @param {Object} comment - 댓글 데이터
+ * @param {boolean} isNewComment - 새 댓글 여부 (애니메이션용)
+ * @returns {string} 댓글 HTML
  */
-function renderComments(comments) {
+function createCommentElement(comment, isNewComment = false) {
+    const currentUser = authState.getState();
+    const isAuthor = currentUser.isLoggedIn && currentUser.user?.userId === comment.author.userId;
+
+    return `
+        <div class="comment-item ${isNewComment ? 'new-comment' : ''}" data-comment-id="${comment.id}">
+            <div class="comment-header">
+                <span class="comment-author">${escapeHtml(comment.author.nickname)}</span>
+                <span class="comment-date">${formatDate(comment.createdAt)}</span>
+            </div>
+            <div class="comment-content">${escapeHtml(comment.content)}</div>
+            ${
+        isAuthor
+            ? `
+                <div class="comment-actions">
+                    <button type="button" class="btn-text comment-edit-btn" data-comment-id="${comment.id}">수정</button>
+                    <button type="button" class="btn-text comment-delete-btn" data-comment-id="${comment.id}">삭제</button>
+                </div>
+            `
+            : ''
+    }
+        </div>
+    `;
+}
+
+/**
+ * 댓글 목록 렌더링
+ * @param {Array} comments - 댓글 목록
+ * @param {number|null} newCommentId - 새로 작성된 댓글 ID (애니메이션 적용용)
+ */
+function renderComments(comments, newCommentId = null) {
     commentCount.textContent = comments.length;
 
     if (comments.length === 0) {
@@ -200,30 +241,15 @@ function renderComments(comments) {
 
     emptyComments.style.display = 'none';
 
-    const currentUser = authState.getState();
-    const commentsHtml = comments
-        .map((comment) => {
-            const isAuthor = currentUser.isLoggedIn && currentUser.user?.userId === comment.author.userId;
+    // 최신순 정렬 (createdAt 기준 내림차순)
+    const sortedComments = [...comments].sort((a, b) => {
+        return new Date(b.createdAt) - new Date(a.createdAt);
+    });
 
-            return `
-            <div class="comment-item" data-comment-id="${comment.id}">
-                <div class="comment-header">
-                    <span class="comment-author">${escapeHtml(comment.author.nickname)}</span>
-                    <span class="comment-date">${formatDate(comment.createdAt)}</span>
-                </div>
-                <div class="comment-content">${escapeHtml(comment.content)}</div>
-                ${
-    isAuthor
-        ? `
-                    <div class="comment-actions">
-                        <button class="btn-text comment-edit-btn" data-comment-id="${comment.id}">수정</button>
-                        <button class="btn-text comment-delete-btn" data-comment-id="${comment.id}">삭제</button>
-                    </div>
-                `
-        : ''
-}
-            </div>
-        `;
+    const commentsHtml = sortedComments
+        .map((comment) => {
+            const isNewComment = newCommentId && comment.id === newCommentId;
+            return createCommentElement(comment, isNewComment);
         })
         .join('');
 
@@ -255,8 +281,26 @@ async function handleCommentSubmit(e) {
             commentInput.value = '';
             updateCommentLength();
 
-            // 게시글 다시 로드하여 댓글 목록 갱신
-            await loadPost();
+            // 새 댓글 데이터 추출
+            const newComment = response.data;
+
+            if (newComment) {
+                // 빈 댓글 상태 숨기기
+                emptyComments.style.display = 'none';
+
+                // 새 댓글 DOM 생성 (애니메이션 적용)
+                const commentHtml = createCommentElement(newComment, true);
+
+                // 맨 위에 새 댓글 추가
+                commentsList.insertAdjacentHTML('afterbegin', commentHtml);
+
+                // 댓글 카운트 업데이트
+                const currentCount = parseInt(commentCount.textContent, 10);
+                commentCount.textContent = currentCount + 1;
+
+                // 이벤트 리스너 재등록 (새로 추가된 버튼에 대해)
+                attachCommentActionListeners();
+            }
         } else {
             toast.error(response.error || '댓글 작성에 실패했습니다.');
         }
@@ -277,30 +321,156 @@ function updateCommentLength() {
 }
 
 /**
- * 댓글 수정 처리
+ * 댓글 수정 처리 (인라인 편집)
  */
-async function handleCommentEdit(commentId) {
+function handleCommentEdit(commentId) {
     const commentItem = document.querySelector(`[data-comment-id="${commentId}"]`);
     if (!commentItem) return;
 
     const contentElement = commentItem.querySelector('.comment-content');
     const currentContent = contentElement.textContent;
 
-    const newContent = prompt('댓글을 수정하세요:', currentContent);
-    if (newContent === null || newContent.trim() === '') return;
+    // 인라인 편집 모드 진입
+    enterEditMode(commentItem, currentContent, commentId);
+}
 
-    const validation = validateCommentContent(newContent.trim());
+/**
+ * 인라인 편집 모드 진입
+ */
+function enterEditMode(commentItem, currentContent, commentId) {
+    // 이미 편집 중이면 무시
+    if (commentItem.classList.contains('editing')) return;
+
+    // 편집 모드 클래스 추가
+    commentItem.classList.add('editing');
+
+    // 편집 폼 HTML 생성
+    const editFormHTML = `
+        <div class="comment-edit-form">
+            <textarea
+                class="comment-edit-textarea"
+                maxlength="500"
+                placeholder="댓글을 입력하세요"
+            >${currentContent}</textarea>
+            <div class="comment-edit-error"></div>
+            <div class="comment-edit-footer">
+                <span class="comment-edit-counter"><span class="current">${currentContent.length}</span>/500</span>
+                <div class="comment-edit-actions">
+                    <button type="button" class="btn btn-secondary btn-sm comment-cancel-btn">취소</button>
+                    <button type="button" class="btn btn-primary btn-sm comment-save-btn">저장</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // 댓글 내용 요소 다음에 편집 폼 삽입
+    const contentElement = commentItem.querySelector('.comment-content');
+    contentElement.insertAdjacentHTML('afterend', editFormHTML);
+
+    // 편집 폼 요소들 가져오기
+    const textarea = commentItem.querySelector('.comment-edit-textarea');
+    const saveBtn = commentItem.querySelector('.comment-save-btn');
+    const cancelBtn = commentItem.querySelector('.comment-cancel-btn');
+
+    // textarea에 포커스 및 커서를 끝으로 이동
+    textarea.focus();
+    textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+
+    // 실시간 검증 및 글자수 카운터
+    textarea.addEventListener('input', () => {
+        validateCommentEdit(commentItem);
+    });
+
+    // 저장 버튼 이벤트
+    saveBtn.addEventListener('click', () => {
+        saveCommentEdit(commentId, commentItem);
+    });
+
+    // 취소 버튼 이벤트
+    cancelBtn.addEventListener('click', () => {
+        cancelCommentEdit(commentItem);
+    });
+
+    // ESC 키로 취소
+    const handleKeyDown = (e) => {
+        if (e.key === 'Escape') {
+            cancelCommentEdit(commentItem);
+            document.removeEventListener('keydown', handleKeyDown);
+        }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+
+    // 초기 검증
+    validateCommentEdit(commentItem);
+}
+
+/**
+ * 댓글 편집 검증
+ */
+function validateCommentEdit(commentItem) {
+    const textarea = commentItem.querySelector('.comment-edit-textarea');
+    const errorElement = commentItem.querySelector('.comment-edit-error');
+    const saveBtn = commentItem.querySelector('.comment-save-btn');
+    const counter = commentItem.querySelector('.comment-edit-counter');
+    const currentSpan = counter.querySelector('.current');
+
+    const value = textarea.value.trim();
+    const length = value.length;
+
+    // 글자수 업데이트
+    currentSpan.textContent = length;
+
+    // 글자수 카운터 색상 변경
+    counter.classList.remove('warning', 'error');
+    if (length > 500) {
+        counter.classList.add('error');
+    } else if (length > 400) {
+        counter.classList.add('warning');
+    }
+
+    // 검증
+    const validation = validateCommentContent(value);
+
     if (!validation.isValid) {
-        toast.error(validation.message);
+        // 에러 상태
+        textarea.classList.add('error');
+        errorElement.textContent = validation.message;
+        saveBtn.disabled = true;
+    } else {
+        // 정상 상태
+        textarea.classList.remove('error');
+        errorElement.textContent = '';
+        saveBtn.disabled = false;
+    }
+}
+
+/**
+ * 댓글 저장
+ */
+async function saveCommentEdit(commentId, commentItem) {
+    const textarea = commentItem.querySelector('.comment-edit-textarea');
+    const value = textarea.value.trim();
+
+    // 최종 검증
+    const validation = validateCommentContent(value);
+    if (!validation.isValid) {
         return;
     }
 
     try {
-        const response = await updateComment(commentId, newContent.trim());
+        const response = await updateComment(commentId, value);
 
         if (response.success) {
             toast.success('댓글이 수정되었습니다.');
-            await loadPost();
+
+            // 댓글 내용 부분만 업데이트
+            const contentElement = commentItem.querySelector('.comment-content');
+            if (contentElement) {
+                contentElement.textContent = value;
+            }
+
+            // 편집 모드 종료
+            cancelCommentEdit(commentItem);
         } else {
             toast.error(response.error || '댓글 수정에 실패했습니다.');
         }
@@ -311,10 +481,31 @@ async function handleCommentEdit(commentId) {
 }
 
 /**
+ * 댓글 편집 취소
+ */
+function cancelCommentEdit(commentItem) {
+    // 편집 모드 클래스 제거
+    commentItem.classList.remove('editing');
+
+    // 편집 폼 제거
+    const editForm = commentItem.querySelector('.comment-edit-form');
+    if (editForm) {
+        editForm.remove();
+    }
+}
+
+/**
  * 댓글 삭제 처리
  */
 async function handleCommentDelete(commentId) {
-    const confirmed = confirm('정말로 이 댓글을 삭제하시겠습니까?');
+    const confirmed = await modal.confirm({
+        title: '댓글 삭제',
+        message: '정말로 이 댓글을 삭제하시겠습니까?',
+        variant: 'danger',
+        confirmText: '삭제',
+        cancelText: '취소',
+    });
+
     if (!confirmed) return;
 
     try {
@@ -322,7 +513,28 @@ async function handleCommentDelete(commentId) {
 
         if (response.success) {
             toast.success('댓글이 삭제되었습니다.');
-            await loadPost();
+
+            // 삭제할 댓글 DOM 찾기
+            const commentItem = document.querySelector(`[data-comment-id="${commentId}"]`);
+
+            if (commentItem) {
+                // fadeOut 애니메이션 추가
+                commentItem.classList.add('deleting');
+
+                // 애니메이션 완료 후 DOM에서 제거
+                setTimeout(() => {
+                    commentItem.remove();
+
+                    // 댓글 카운트 업데이트
+                    const currentCount = parseInt(commentCount.textContent, 10);
+                    commentCount.textContent = currentCount - 1;
+
+                    // 댓글이 0개가 되면 빈 상태 표시
+                    if (currentCount - 1 === 0) {
+                        emptyComments.style.display = 'block';
+                    }
+                }, 300); // fadeOut 애니메이션 시간과 일치
+            }
         } else {
             toast.error(response.error || '댓글 삭제에 실패했습니다.');
         }

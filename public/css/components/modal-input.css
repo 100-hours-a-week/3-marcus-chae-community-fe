@@ -1,0 +1,133 @@
+/**
+ * Input Modal 스타일
+ * 텍스트 입력 모달 전용 스타일을 정의합니다.
+ * textarea, 글자수 카운터, 실시간 검증 스타일을 포함합니다.
+ */
+
+/* ==================== Input Modal Layout ==================== */
+.modal-input .modal-content {
+    max-width: 500px;
+}
+
+.modal-input .modal-body {
+    margin-bottom: var(--spacing-6);
+}
+
+/* ==================== Input Field ==================== */
+.modal-input .input-wrapper {
+    position: relative;
+    margin-bottom: var(--spacing-2);
+}
+
+.modal-input textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: var(--spacing-3);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-primary);
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border-dark);
+    border-radius: var(--radius-lg);
+    resize: vertical;
+    transition: all var(--transition-base);
+    outline: none;
+}
+
+.modal-input textarea::placeholder {
+    color: var(--color-text-disabled);
+}
+
+.modal-input textarea:focus {
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 var(--focus-ring-width) rgba(59, 130, 246, 0.1);
+}
+
+.modal-input textarea:hover:not(:disabled):not(:focus) {
+    border-color: var(--color-primary-400);
+}
+
+/* ==================== Error State ==================== */
+.modal-input textarea.error {
+    border-color: var(--color-error);
+}
+
+.modal-input textarea.error:focus {
+    box-shadow: 0 0 0 var(--focus-ring-width) rgba(239, 68, 68, 0.1);
+}
+
+.modal-input .error-message {
+    color: var(--color-error);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-normal);
+    margin-top: var(--spacing-2);
+    min-height: 18px;
+}
+
+/* ==================== Character Counter ==================== */
+.modal-input .char-counter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--spacing-2);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-tertiary);
+}
+
+.modal-input .char-counter .count {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+}
+
+/* 글자수 경고 (80% 이상) */
+.modal-input .char-counter.warning .count {
+    color: var(--color-warning);
+}
+
+/* 글자수 초과 */
+.modal-input .char-counter.error .count {
+    color: var(--color-error);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* ==================== Modal Actions ==================== */
+.modal-input .modal-actions {
+    display: flex;
+    gap: var(--spacing-3);
+    justify-content: flex-end;
+}
+
+/* 확인 버튼 비활성화 (유효하지 않은 입력) */
+.modal-input .btn-confirm:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ==================== Helper Text ==================== */
+.modal-input .helper-text {
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-normal);
+    margin-top: var(--spacing-1);
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 768px) {
+    .modal-input .modal-content {
+        max-width: 100%;
+    }
+
+    .modal-input textarea {
+        min-height: 100px;
+        font-size: var(--font-size-xs);
+    }
+
+    .modal-input .modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .modal-input .modal-actions .btn {
+        width: 100%;
+    }
+}

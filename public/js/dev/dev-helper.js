@@ -48,18 +48,20 @@ class DevHelper {
 
     /**
      * 페이지 타입 감지
+     * URL Rewrite를 고려하여 /login과 /pages/login.html 모두 지원
      * @returns {string|null} 'login' | 'signup' | null
      */
     detectPageType() {
         const path = window.location.pathname;
-        
-        if (path.includes('login.html')) {
+
+        // URL Rewrite 고려: /login, /pages/login.html 모두 지원
+        if (path.includes('login')) {
             return 'login';
         }
-        if (path.includes('signup.html')) {
+        if (path.includes('signup')) {
             return 'signup';
         }
-        
+
         return null;
     }
 
@@ -71,6 +73,14 @@ class DevHelper {
         // 버튼 컨테이너 찾기
         const form = document.querySelector('form');
         if (!form) {
+            return;
+        }
+
+        // 제출 버튼 찾기
+        const submitButtonId = pageType === 'login' ? 'loginButton' : 'signupButton';
+        const submitButton = document.getElementById(submitButtonId);
+
+        if (!submitButton) {
             return;
         }
 
@@ -87,8 +97,8 @@ class DevHelper {
             this.fillForm(pageType);
         });
 
-        // 폼의 마지막에 추가
-        form.appendChild(button);
+        // 제출 버튼 바로 다음에 추가
+        submitButton.insertAdjacentElement('afterend', button);
     }
 
     /**

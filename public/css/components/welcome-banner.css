@@ -1,0 +1,51 @@
+/* ==================== Welcome Banner Component ==================== */
+
+/**
+ * 페이지 상단의 환영 배너
+ * 그라데이션 배경에 제목과 설명을 표시하는 헤더 섹션
+ */
+.welcome-section {
+    background: linear-gradient(
+        135deg,
+        var(--color-primary-500) 0%,
+        var(--color-primary-600) 100%
+    );
+    color: var(--color-white);
+    padding: var(--spacing-12) var(--spacing-5);
+    text-align: center;
+}
+
+.welcome-content {
+    max-width: var(--container-md);
+    margin: 0 auto;
+}
+
+.welcome-section h1 {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-3);
+    color: var(--color-white);
+    line-height: var(--line-height-tight);
+}
+
+.welcome-section p {
+    font-size: var(--font-size-lg);
+    color: var(--color-white);
+    opacity: 0.95;
+    line-height: var(--line-height-relaxed);
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 768px) {
+    .welcome-section {
+        padding: var(--spacing-8) var(--spacing-4);
+    }
+
+    .welcome-section h1 {
+        font-size: var(--font-size-3xl);
+    }
+
+    .welcome-section p {
+        font-size: var(--font-size-base);
+    }
+}

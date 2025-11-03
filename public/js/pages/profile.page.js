@@ -61,13 +61,15 @@ class ProfilePage {
         this.elements.profileEmail = document.getElementById('profileEmail');
         this.elements.profileCreatedAt = document.getElementById('profileCreatedAt');
 
-        // 프로필 수정 폼
-        this.elements.profileEditForm = document.getElementById('profileEditForm');
+        // 닉네임 인라인 편집
+        this.elements.nicknameDisplayMode = document.getElementById('nicknameDisplayMode');
+        this.elements.nicknameEditMode = document.getElementById('nicknameEditForm');
+        this.elements.nicknameEditBtn = document.getElementById('nicknameEditBtn');
+        this.elements.nicknameCancelBtn = document.getElementById('nicknameCancelBtn');
         this.elements.editNickname = document.getElementById('editNickname');
-        this.elements.editEmail = document.getElementById('editEmail');
-        this.elements.profileEditBtn = document.getElementById('profileEditBtn');
 
         // 비밀번호 변경 폼
+        this.elements.passwordChangeToggle = document.getElementById('passwordChangeToggle');
         this.elements.passwordChangeForm = document.getElementById('passwordChangeForm');
         this.elements.currentPassword = document.getElementById('currentPassword');
         this.elements.newPassword = document.getElementById('newPassword');
@@ -119,12 +121,6 @@ class ProfilePage {
 
         // 수정 폼에 현재 값 설정 (닉네임만 수정 가능)
         this.elements.editNickname.value = data.nickname || '';
-
-        // 이메일은 읽기 전용으로 설정
-        if (this.elements.editEmail) {
-            this.elements.editEmail.value = data.email || '';
-            this.elements.editEmail.disabled = true;
-        }
     }
 
     /**
@@ -172,11 +168,33 @@ class ProfilePage {
      * 이벤트 리스너 등록
      */
     attachEventListeners() {
-        // 프로필 수정 폼
-        this.elements.profileEditForm?.addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.handleProfileEdit();
+        // 닉네임 편집 버튼
+        this.elements.nicknameEditBtn?.addEventListener('click', () => {
+            this.showNicknameEditMode();
         });
+
+        // 닉네임 취소 버튼
+        this.elements.nicknameCancelBtn?.addEventListener('click', () => {
+            this.hideNicknameEditMode();
+        });
+
+        // 닉네임 수정 폼
+        this.elements.nicknameEditMode?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleNicknameEdit();
+        });
+
+        // 비밀번호 변경 토글 버튼
+        const passwordToggleBtn = document.getElementById('passwordChangeToggleBtn');
+        if (passwordToggleBtn) {
+            passwordToggleBtn.addEventListener('click', () => this.togglePasswordChangeForm());
+        }
+
+        // 비밀번호 변경 취소 버튼
+        const passwordCancelBtn = document.getElementById('passwordChangeCancelBtn');
+        if (passwordCancelBtn) {
+            passwordCancelBtn.addEventListener('click', () => this.cancelPasswordChange());
+        }
 
         // 비밀번호 변경 폼
         this.elements.passwordChangeForm?.addEventListener('submit', (e) => {
@@ -186,11 +204,93 @@ class ProfilePage {
     }
 
     /**
-     * 프로필 수정 입력 값 검증
+     * 닉네임 편집 모드 표시
+     */
+    showNicknameEditMode() {
+        if (this.elements.nicknameDisplayMode && this.elements.nicknameEditMode) {
+            this.elements.nicknameDisplayMode.classList.add('hidden');
+            this.elements.nicknameEditMode.classList.remove('hidden');
+
+            // 현재 닉네임 값으로 입력 필드 채우기
+            const currentNickname = this.elements.profileNickname.textContent;
+            if (currentNickname && currentNickname !== '-') {
+                this.elements.editNickname.value = currentNickname;
+            }
+
+            // 포커스
+            this.elements.editNickname.focus();
+            this.elements.editNickname.select();
+        }
+    }
+
+    /**
+     * 닉네임 편집 모드 숨김
+     */
+    hideNicknameEditMode() {
+        if (this.elements.nicknameDisplayMode && this.elements.nicknameEditMode) {
+            this.elements.nicknameEditMode.classList.add('hidden');
+            this.elements.nicknameDisplayMode.classList.remove('hidden');
+
+            // 에러 메시지 초기화
+            hideInputError(this.elements.editNickname);
+        }
+    }
+
+    /**
+     * 비밀번호 변경 폼 토글
+     */
+    togglePasswordChangeForm() {
+        const form = this.elements.passwordChangeForm;
+
+        if (form) {
+            const isHidden = form.classList.contains('hidden');
+
+            if (isHidden) {
+                // 폼 표시
+                form.classList.remove('hidden');
+                this.elements.passwordChangeToggle?.classList.add('expanded');
+
+                // 포커스
+                const currentPasswordInput = document.getElementById('currentPassword');
+                if (currentPasswordInput) {
+                    currentPasswordInput.focus();
+                }
+            } else {
+                // 폼 숨김
+                this.cancelPasswordChange();
+            }
+        }
+    }
+
+    /**
+     * 비밀번호 변경 취소
+     */
+    cancelPasswordChange() {
+        const form = this.elements.passwordChangeForm;
+
+        if (form) {
+            form.classList.add('hidden');
+            this.elements.passwordChangeToggle?.classList.remove('expanded');
+
+            // 폼 리셋
+            form.reset();
+
+            // 에러 메시지 초기화
+            const errors = ['currentPasswordError', 'newPasswordError', 'confirmPasswordError'];
+            errors.forEach((errorId) => {
+                const errorEl = document.getElementById(errorId);
+                if (errorEl) {
+                    errorEl.textContent = '';
+                }
+            });
+        }
+    }
+
+    /**
+     * 닉네임 입력 값 검증
      * @returns {boolean} 검증 성공 여부
      */
-    validateProfileEdit() {
-        // 닉네임 검증만 수행 (이메일은 수정 불가)
+    validateNicknameEdit() {
         const nickname = this.elements.editNickname.value.trim();
         const validation = validateNickname(nickname);
 
@@ -239,18 +339,14 @@ class ProfilePage {
     }
 
     /**
-     * 프로필 수정 처리 (닉네임만 수정)
+     * 닉네임 수정 처리
      */
-    async handleProfileEdit() {
+    async handleNicknameEdit() {
         try {
             // 입력 값 검증
-            if (!this.validateProfileEdit()) {
+            if (!this.validateNicknameEdit()) {
                 return;
             }
-
-            // 버튼 비활성화
-            this.elements.profileEditBtn.disabled = true;
-            this.elements.profileEditBtn.textContent = '수정 중...';
 
             const nickname = this.elements.editNickname.value.trim();
 
@@ -265,20 +361,15 @@ class ProfilePage {
 
                 // 화면 업데이트
                 this.displayProfileData(response.data);
+
+                // 편집 모드 종료
+                this.hideNicknameEditMode();
             } else {
                 toast.error(response.error || '닉네임 수정에 실패했습니다.');
             }
-
-            // 버튼 다시 활성화
-            this.elements.profileEditBtn.disabled = false;
-            this.elements.profileEditBtn.textContent = '닉네임 수정';
         } catch (error) {
             console.error('닉네임 수정 에러:', error);
             toast.error('닉네임 수정 중 오류가 발생했습니다.');
-
-            // 버튼 다시 활성화
-            this.elements.profileEditBtn.disabled = false;
-            this.elements.profileEditBtn.textContent = '닉네임 수정';
         }
     }
 
@@ -306,7 +397,7 @@ class ProfilePage {
 
             if (response.success) {
                 toast.success('비밀번호가 변경되었습니다.');
-                this.elements.passwordChangeForm.reset();
+                this.cancelPasswordChange();
             } else {
                 toast.error(response.error || '비밀번호 변경에 실패했습니다.');
             }

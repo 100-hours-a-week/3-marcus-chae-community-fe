@@ -1,5 +1,9 @@
 /* ==================== Imports ==================== */
 @import '../design-system/variables.css';
+@import '../components/animations.css';
+
+/* Google Fonts - Noto Sans KR */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
 
 /* ==================== Reset & Base ==================== */
 * {
@@ -22,6 +26,19 @@ body {
 
 main {
     flex: 1;
+    animation: pageEnter 0.4s ease;
+}
+
+/* ==================== Page Enter Animation ==================== */
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* ==================== Header Styles ==================== */
@@ -127,6 +144,10 @@ main {
 /* Note: Input Block 스타일은 /css/components/input.css 사용 */
 
 /* ==================== Utility Classes ==================== */
+.hidden {
+    display: none !important;
+}
+
 .horizontalLayout {
     display: flex;
     align-items: center;
@@ -154,5 +175,12 @@ main {
 
     .logo-text {
         font-size: var(--font-size-xl);
+    }
+}
+
+/* ==================== Accessibility ==================== */
+@media (prefers-reduced-motion: reduce) {
+    main {
+        animation: none;
     }
 }

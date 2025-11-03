@@ -4,17 +4,17 @@
  */
 
 :root {
-    /* ==================== Colors - Primary ==================== */
-    --color-primary-50: #eff6ff;
-    --color-primary-100: #dbeafe;
-    --color-primary-200: #bfdbfe;
-    --color-primary-300: #93c5fd;
-    --color-primary-400: #60a5fa;
-    --color-primary-500: #3b82f6;
-    --color-primary-600: #2563eb;
-    --color-primary-700: #1d4ed8;
-    --color-primary-800: #1e40af;
-    --color-primary-900: #1e3a8a;
+    /* ==================== Colors - Primary (Darker Teal Green) ==================== */
+    --color-primary-50: #e6f7f5;
+    --color-primary-100: #b3e5de;
+    --color-primary-200: #80d4c7;
+    --color-primary-300: #4dc2b0;
+    --color-primary-400: #26b09d;
+    --color-primary-500: #009688;
+    --color-primary-600: #00897b;
+    --color-primary-700: #00796b;
+    --color-primary-800: #00695c;
+    --color-primary-900: #004d40;
 
     /* ==================== Colors - Semantic ==================== */
     --color-success-light: #d1fae5;
@@ -99,8 +99,8 @@
 
     /* ==================== Typography - Font Family ==================== */
     --font-family-base:
-        -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
-        'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+        'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     --font-family-mono:
         'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Droid Sans Mono', 'Source Code Pro',
         monospace;
@@ -186,7 +186,7 @@
     --container-xl: 1200px;
 
     /* ==================== Focus Ring ==================== */
-    --focus-ring-color: rgba(59, 130, 246, 0.5);
+    --focus-ring-color: rgba(0, 150, 136, 0.5);
     --focus-ring-width: 3px;
     --focus-ring-offset: 2px;
 }

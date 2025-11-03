@@ -1,0 +1,138 @@
+/**
+ * Confirmation Modal 스타일
+ * 확인/취소 대화상자 전용 스타일을 정의합니다.
+ * 위험도별 variant를 제공합니다 (danger, warning, info)
+ */
+
+/* ==================== Confirm Modal Variants ==================== */
+
+/* Danger Variant (삭제 등 위험한 작업) */
+.modal-confirm.danger .modal-content {
+    border-top: 4px solid var(--color-error);
+}
+
+.modal-confirm.danger .modal-content h3 {
+    color: var(--color-error-dark);
+}
+
+.modal-confirm.danger .modal-icon {
+    color: var(--color-error);
+    background-color: var(--color-error-light);
+}
+
+/* Warning Variant (취소 등 주의가 필요한 작업) */
+.modal-confirm.warning .modal-content {
+    border-top: 4px solid var(--color-warning);
+}
+
+.modal-confirm.warning .modal-content h3 {
+    color: var(--color-warning-dark);
+}
+
+.modal-confirm.warning .modal-icon {
+    color: var(--color-warning);
+    background-color: var(--color-warning-light);
+}
+
+/* Info Variant (기본 확인) */
+.modal-confirm.info .modal-content {
+    border-top: 4px solid var(--color-info);
+}
+
+.modal-confirm.info .modal-content h3 {
+    color: var(--color-info-dark);
+}
+
+.modal-confirm.info .modal-icon {
+    color: var(--color-info);
+    background-color: var(--color-info-light);
+}
+
+/* ==================== Confirm Modal Layout ==================== */
+.modal-confirm .modal-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+    margin-bottom: var(--spacing-5);
+}
+
+.modal-confirm .modal-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+}
+
+.modal-confirm .modal-header-text {
+    flex: 1;
+}
+
+.modal-confirm .modal-content h3 {
+    margin-bottom: var(--spacing-2);
+}
+
+.modal-confirm .modal-content p {
+    margin-bottom: 0;
+    color: var(--color-text-secondary);
+}
+
+/* ==================== Confirm Modal Actions ==================== */
+.modal-confirm .modal-actions {
+    margin-top: var(--spacing-6);
+    display: flex;
+    gap: var(--spacing-3);
+    justify-content: flex-end;
+}
+
+/* 위험도에 따른 확인 버튼 스타일 */
+.modal-confirm.danger .btn-confirm {
+    background-color: var(--color-error);
+    border-color: var(--color-error);
+}
+
+.modal-confirm.danger .btn-confirm:hover:not(:disabled) {
+    background-color: var(--color-error-dark);
+    border-color: var(--color-error-dark);
+}
+
+.modal-confirm.warning .btn-confirm {
+    background-color: var(--color-warning);
+    border-color: var(--color-warning);
+}
+
+.modal-confirm.warning .btn-confirm:hover:not(:disabled) {
+    background-color: var(--color-warning-dark);
+    border-color: var(--color-warning-dark);
+}
+
+.modal-confirm.info .btn-confirm {
+    background-color: var(--color-info);
+    border-color: var(--color-info);
+}
+
+.modal-confirm.info .btn-confirm:hover:not(:disabled) {
+    background-color: var(--color-info-dark);
+    border-color: var(--color-info-dark);
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 768px) {
+    .modal-confirm .modal-icon {
+        width: 40px;
+        height: 40px;
+        font-size: var(--font-size-xl);
+    }
+
+    .modal-confirm .modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .modal-confirm .modal-actions .btn {
+        width: 100%;
+    }
+}

@@ -1,37 +1,5 @@
 /* ==================== Profile Page Styles ==================== */
 
-/* ==================== Welcome Section ==================== */
-.welcome-section {
-    background: linear-gradient(
-        135deg,
-        var(--color-primary-500) 0%,
-        var(--color-primary-600) 100%
-    );
-    color: var(--color-white);
-    padding: var(--spacing-12) var(--spacing-5);
-    text-align: center;
-}
-
-.welcome-content {
-    max-width: var(--container-md);
-    margin: 0 auto;
-}
-
-.welcome-section h1 {
-    font-size: var(--font-size-4xl);
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--spacing-3);
-    color: var(--color-white);
-    line-height: var(--line-height-tight);
-}
-
-.welcome-section p {
-    font-size: var(--font-size-lg);
-    color: var(--color-white);
-    opacity: 0.95;
-    line-height: var(--line-height-relaxed);
-}
-
 /* ==================== Profile Container ==================== */
 .profile-container {
     max-width: var(--container-md);
@@ -107,18 +75,201 @@
     text-align: right;
 }
 
-/* ==================== Edit Card ==================== */
-.profile-edit-section,
-.password-change-section {
-    padding: var(--spacing-8);
-    background-color: var(--color-white);
-    border-radius: var(--radius-2xl);
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--color-border-light);
+/* ==================== Nickname Inline Edit ==================== */
+.nickname-item {
+    position: relative;
 }
 
-.edit-card {
-    /* input-block 컴포넌트가 내부 간격 관리 */
+.profile-value-container {
+    flex: 1;
+    text-align: right;
+}
+
+.nickname-display-mode {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-2);
+    transition: all var(--transition-base);
+}
+
+.btn-icon-edit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.btn-icon-edit:hover {
+    background-color: var(--color-primary-50);
+    color: var(--color-primary-600);
+    border-color: var(--color-primary-200);
+}
+
+.nickname-edit-mode {
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.inline-edit-group {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-2);
+    flex-direction: column;
+}
+
+.inline-edit-group input {
+    flex: 1;
+    width: 100%;
+    padding: var(--spacing-2) var(--spacing-3);
+    border: 1px solid var(--color-border-medium);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-base);
+    transition: all var(--transition-base);
+}
+
+.inline-edit-group input:focus {
+    outline: none;
+    border-color: var(--color-primary-500);
+    box-shadow: 0 0 0 3px var(--color-primary-50);
+}
+
+.inline-edit-actions {
+    display: flex;
+    gap: var(--spacing-2);
+}
+
+.btn-icon-save,
+.btn-icon-cancel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.btn-icon-save {
+    background-color: var(--color-primary-500);
+    color: var(--color-white);
+}
+
+.btn-icon-save:hover {
+    background-color: var(--color-primary-600);
+}
+
+.btn-icon-cancel {
+    background-color: var(--color-gray-100);
+    color: var(--color-text-secondary);
+}
+
+.btn-icon-cancel:hover {
+    background-color: var(--color-gray-200);
+    color: var(--color-text-primary);
+}
+
+/* ==================== Password Item ==================== */
+.password-item {
+    display: block;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+.password-item:hover {
+    background: transparent !important;
+}
+
+.password-change-toggle {
+    margin-bottom: var(--spacing-4);
+}
+
+.password-toggle-btn {
+    width: 100%;
+    padding: 0;
+    background: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-gray-100) 100%);
+    border: 2px solid var(--color-border-light);
+    border-radius: var(--radius-xl);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    overflow: hidden;
+}
+
+.password-toggle-btn:hover {
+    border-color: var(--color-primary-300);
+    background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-primary-100) 100%);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.password-toggle-content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+    padding: var(--spacing-5);
+}
+
+.password-toggle-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    color: var(--color-primary-600);
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.password-toggle-text {
+    flex: 1;
+    text-align: left;
+}
+
+.password-toggle-text h3 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-1);
+}
+
+.password-toggle-text p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+    margin: 0;
+}
+
+.password-toggle-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-tertiary);
+    transition: transform var(--transition-base);
+    flex-shrink: 0;
+}
+
+.password-toggle-btn:hover .password-toggle-arrow {
+    color: var(--color-primary-600);
+}
+
+.password-change-toggle.expanded .password-toggle-arrow {
+    transform: rotate(180deg);
+}
+
+.password-form {
+    padding-top: var(--spacing-4);
+    animation: slideDown 0.3s ease-out;
 }
 
 .form-actions {
@@ -128,20 +279,11 @@
     gap: var(--spacing-3);
 }
 
+/* ==================== Animations ==================== */
+/* 애니메이션은 animations.css에서 import됨 (fadeIn, slideDown) */
+
 /* ==================== Responsive Design ==================== */
 @media (max-width: 768px) {
-    .welcome-section {
-        padding: var(--spacing-8) var(--spacing-4);
-    }
-
-    .welcome-section h1 {
-        font-size: var(--font-size-3xl);
-    }
-
-    .welcome-section p {
-        font-size: var(--font-size-base);
-    }
-
     .profile-container {
         padding: var(--spacing-6) var(--spacing-4);
     }
@@ -150,11 +292,36 @@
         gap: var(--spacing-6);
     }
 
-    .profile-info-section,
-    .profile-edit-section,
-    .password-change-section {
+    .profile-info-section {
         padding: var(--spacing-6);
         border-radius: var(--radius-xl);
+    }
+
+    .inline-edit-group {
+        flex-direction: column;
+    }
+
+    .password-toggle-content {
+        padding: var(--spacing-4);
+        gap: var(--spacing-3);
+    }
+
+    .password-toggle-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .password-toggle-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .password-toggle-text h3 {
+        font-size: var(--font-size-base);
+    }
+
+    .password-toggle-text p {
+        font-size: var(--font-size-xs);
     }
 
     .section-header h2 {
@@ -189,9 +356,7 @@
         padding: var(--spacing-4) var(--spacing-3);
     }
 
-    .profile-info-section,
-    .profile-edit-section,
-    .password-change-section {
+    .profile-info-section {
         padding: var(--spacing-4);
     }
 
