@@ -45,7 +45,7 @@
                     </div>
 
                     <!-- 무한 스크롤 감지용 센티널 -->
-                    <div id="scrollSentinel" style="height: 1px;"></div>
+                    <div id="scrollSentinel" style="height: 1px"></div>
 
                     <!-- 로딩 인디케이터 -->
                     <div class="loading-indicator" id="loadingIndicator">
@@ -61,8 +61,14 @@
                     <!-- 빈 상태 표시 -->
                     <div class="empty-state" id="emptyState" style="display: none">
                         <div class="empty-icon">
-                            <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <svg
+                                class="icon"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                                ></path>
                                 <polyline points="14 2 14 8 20 8"></polyline>
                                 <line x1="16" y1="13" x2="8" y2="13"></line>
                                 <line x1="16" y1="17" x2="8" y2="17"></line>

@@ -26,10 +26,7 @@ class Modal {
         await import('../components/modal-confirm.component.js');
 
         // CSS 로드
-        this.loadStyles([
-            '/css/components/modal.css',
-            '/css/components/modal-confirm.css',
-        ]);
+        this.loadStyles(['/css/components/modal.css', '/css/components/modal-confirm.css']);
 
         // 컴포넌트 생성
         const modalElement = document.createElement('modal-confirm');
@@ -67,10 +64,7 @@ class Modal {
         await import('../components/modal-input.component.js');
 
         // CSS 로드
-        this.loadStyles([
-            '/css/components/modal.css',
-            '/css/components/modal-input.css',
-        ]);
+        this.loadStyles(['/css/components/modal.css', '/css/components/modal-input.css']);
 
         // 컴포넌트 생성
         const modalElement = document.createElement('modal-input');
@@ -95,9 +89,7 @@ class Modal {
     loadStyles(stylePaths) {
         stylePaths.forEach((path) => {
             // 이미 로드된 스타일인지 확인
-            const existingLink = document.querySelector(
-                `link[href="${path}"]`
-            );
+            const existingLink = document.querySelector(`link[href="${path}"]`);
             if (!existingLink) {
                 const link = document.createElement('link');
                 link.rel = 'stylesheet';

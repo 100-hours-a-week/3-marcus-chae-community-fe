@@ -41,6 +41,8 @@ app.use((req, res, next) => {
 app.use(express.static('public'));
 
 app.listen(PORT, () => {
+    /* eslint-disable no-console */
     console.log(`[Server] Frontend: http://localhost:${PORT}`);
     console.log(`[Server] API Proxy: ${API_TARGET}`);
+    /* eslint-enable no-console */
 });

@@ -1,7 +1,7 @@
 /**
  * 개발 헬퍼 유틸리티
  * 개발 중 테스트를 위한 자동 입력 기능을 제공합니다.
- * 
+ *
  * ⚠️ 프로덕션 배포 시 이 파일의 import를 제거하세요!
  */
 
@@ -40,7 +40,7 @@ class DevHelper {
     setup() {
         // 현재 페이지 타입 감지
         const pageType = this.detectPageType();
-        
+
         if (pageType) {
             this.addQuickFillButton(pageType);
         }
@@ -107,7 +107,7 @@ class DevHelper {
      */
     fillForm(pageType) {
         const data = this.testData[pageType];
-        
+
         if (!data) {
             return;
         }
@@ -117,7 +117,7 @@ class DevHelper {
             const input = document.getElementById(key);
             if (input) {
                 input.value = data[key];
-                
+
                 // input 이벤트 트리거 (검증 로직 등을 위해)
                 input.dispatchEvent(new Event('input', { bubbles: true }));
             }

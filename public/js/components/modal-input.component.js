@@ -26,10 +26,7 @@ class ModalInputComponent extends HTMLElement {
             if (textarea) {
                 textarea.focus();
                 // 커서를 끝으로 이동
-                textarea.setSelectionRange(
-                    textarea.value.length,
-                    textarea.value.length
-                );
+                textarea.setSelectionRange(textarea.value.length, textarea.value.length);
             }
         }, 100);
     }

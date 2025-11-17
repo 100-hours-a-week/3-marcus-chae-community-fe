@@ -251,7 +251,8 @@ class PostFormPage {
 
         // 버튼 비활성화 (중복 제출 방지)
         this.elements.submitButton.disabled = true;
-        this.elements.submitButton.textContent = this.mode === 'create' ? '작성 중...' : '수정 중...';
+        this.elements.submitButton.textContent =
+            this.mode === 'create' ? '작성 중...' : '수정 중...';
 
         try {
             let response;
@@ -263,7 +264,9 @@ class PostFormPage {
             }
 
             if (response.success) {
-                toast.success(this.mode === 'create' ? '게시글이 작성되었습니다.' : '게시글이 수정되었습니다.');
+                toast.success(
+                    this.mode === 'create' ? '게시글이 작성되었습니다.' : '게시글이 수정되었습니다.'
+                );
 
                 // 게시글 상세 페이지로 이동
                 const postId = this.mode === 'create' ? response.data.id : this.postId;

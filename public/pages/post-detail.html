@@ -32,9 +32,7 @@
                     <div class="error-icon">⚠️</div>
                     <h2>게시글을 불러올 수 없습니다</h2>
                     <p id="errorMessage"></p>
-                    <button class="btn btn-secondary" id="backToHomeBtn">
-                        홈으로 돌아가기
-                    </button>
+                    <button class="btn btn-secondary" id="backToHomeBtn">홈으로 돌아가기</button>
                 </div>
 
                 <!-- 게시글 컨테이너 -->
@@ -50,8 +48,14 @@
                             <div class="post-info">
                                 <span class="post-date" id="postDate"></span>
                                 <span class="post-views">
-                                    <svg class="icon icon-sm" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <svg
+                                        class="icon icon-sm"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                                        ></path>
                                         <circle cx="12" cy="12" r="3"></circle>
                                     </svg>
                                     <span id="viewCount">0</span>
@@ -84,7 +88,11 @@
                     </div>
 
                     <!-- 댓글 작성 폼 (로그인 시만 표시) -->
-                    <div class="comment-form-container" id="commentFormContainer" style="display: none">
+                    <div
+                        class="comment-form-container"
+                        id="commentFormContainer"
+                        style="display: none"
+                    >
                         <form class="comment-form" id="commentForm">
                             <textarea
                                 class="comment-input"
@@ -95,7 +103,9 @@
                             ></textarea>
                             <div class="comment-form-footer">
                                 <span class="comment-length" id="commentLength">0/500</span>
-                                <button type="submit" class="btn btn-primary btn-sm">댓글 작성</button>
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    댓글 작성
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -103,9 +113,7 @@
                     <!-- 로그인 유도 메시지 (비로그인 시 표시) -->
                     <div class="login-prompt" id="loginPrompt" style="display: none">
                         <p>댓글을 작성하려면 로그인이 필요합니다.</p>
-                        <button class="btn btn-primary btn-sm" id="goToLoginBtn">
-                            로그인하기
-                        </button>
+                        <button class="btn btn-primary btn-sm" id="goToLoginBtn">로그인하기</button>
                     </div>
 
                     <!-- 댓글 목록 -->

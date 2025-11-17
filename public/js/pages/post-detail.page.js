@@ -204,6 +204,7 @@ function createCommentElement(comment, isNewComment = false) {
     const currentUser = authState.getState();
     const isAuthor = currentUser.isLoggedIn && currentUser.user?.userId === comment.author.userId;
 
+    /* eslint-disable indent */
     return `
         <div class="comment-item ${isNewComment ? 'new-comment' : ''}" data-comment-id="${comment.id}">
             <div class="comment-header">
@@ -212,17 +213,18 @@ function createCommentElement(comment, isNewComment = false) {
             </div>
             <div class="comment-content">${escapeHtml(comment.content)}</div>
             ${
-        isAuthor
-            ? `
+                isAuthor
+                    ? `
                 <div class="comment-actions">
                     <button type="button" class="btn-text comment-edit-btn" data-comment-id="${comment.id}">수정</button>
                     <button type="button" class="btn-text comment-delete-btn" data-comment-id="${comment.id}">삭제</button>
                 </div>
             `
-            : ''
-    }
+                    : ''
+            }
         </div>
     `;
+    /* eslint-enable indent */
 }
 
 /**
