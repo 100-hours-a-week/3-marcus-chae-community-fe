@@ -1,0 +1,35 @@
+name: deploy.yml
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-22.04-arm
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: dockdoinkorea/community-frontend:latest
+          platforms: linux/arm64
+
+
+      - name: Copy compose file to EC2
+        env:
+          PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          HOST: ${{ secrets.EC2_HOST }}
+          USER: ubuntu
+        run: |
+          echo "$PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER}@${HOST} 'mkdir -p /home/ubuntu/app'
+          scp -o StrictHostKeyChecking=no -i private_key.pem compose.dev.yaml ${USER}@${HOST}:/home/ubuntu/app/
+          rm -f private_key.pem
+
