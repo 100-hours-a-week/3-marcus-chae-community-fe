@@ -1,0 +1,86 @@
+# 의존성 (npm ci로 재설치)
+node_modules/
+package-lock.json
+
+# 로그 파일
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Git 관련
+.git/
+.gitignore
+.gitattributes
+
+# IDE/에디터 설정
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS 파일
+.DS_Store
+Thumbs.db
+
+# 테스트/커버리지
+coverage/
+.nyc_output/
+test/
+tests/
+__tests__/
+*.test.js
+*.spec.js
+
+# 문서
+README.md
+*.md
+docs/
+
+# 린트/포맷 설정
+.prettierrc
+.eslintrc.cjs
+.eslintrc.json
+.eslintignore
+
+# Docker 관련
+Dockerfile
+Dockerfile.*
+.dockerignore
+docker-compose*.yml
+compose*.yaml
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+
+# 환경 변수
+.env
+.env.*
+.env.local
+.env.*.local
+!.env.example
+
+# 보안 관련
+*.pem
+*.key
+*.cert
+
+# 빌드 산출물
+dist/
+build/
+
+# 캐시/임시 파일
+.cache/
+*.tmp
+.temp/
+.next/
+.nuxt/
+
+# 기타
+.editorconfig
+.npmrc
+.yarnrc

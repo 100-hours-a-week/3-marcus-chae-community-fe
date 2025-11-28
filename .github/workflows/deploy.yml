@@ -6,7 +6,7 @@ on:
       - develop
 
 jobs:
-  build-and-deploy:
+  build-and-push:
     runs-on: ubuntu-22.04-arm
 
     steps:
@@ -29,31 +29,71 @@ jobs:
           tags: dockdoinkorea/community-frontend:latest
           platforms: linux/arm64
 
+  deploy:
+    runs-on: ubuntu-22.04-arm
+    needs: build-and-push
 
-      - name: Copy compose file to EC2
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: Get ASG instance IPs
+        id: get-instances
+        run: |
+          # ASG에서 InService 상태의 인스턴스 ID 조회
+          INSTANCE_IDS=$(aws autoscaling describe-auto-scaling-groups \
+            --auto-scaling-group-names ${{ secrets.ASG_NAME }} \
+            --query 'AutoScalingGroups[0].Instances[?LifecycleState==`InService`].InstanceId' \
+            --output text)
+
+          echo "Instance IDs: $INSTANCE_IDS"
+
+          # 인스턴스 ID로 Public IP 조회
+          INSTANCE_IPS=$(aws ec2 describe-instances \
+            --instance-ids $INSTANCE_IDS \
+            --query 'Reservations[].Instances[].PublicIpAddress' \
+            --output text)
+
+          echo "instances=$INSTANCE_IPS" >> $GITHUB_OUTPUT
+          echo "Found instances: $INSTANCE_IPS"
+
+      - name: Deploy to all ASG instances
         env:
           PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          HOST: ${{ secrets.EC2_HOST }}
           USER: ubuntu
+          INSTANCE_IPS: ${{ steps.get-instances.outputs.instances }}
         run: |
           echo "$PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER}@${HOST} 'mkdir -p /home/ubuntu/app'
-          scp -o StrictHostKeyChecking=no -i private_key.pem compose.dev.yaml ${USER}@${HOST}:/home/ubuntu/app/
-          rm -f private_key.pem
 
-      - name: Deploy to EC2
-        env:
-          PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          HOST: ${{ secrets.EC2_HOST }}
-          USER: ubuntu
-        run: |
-          echo "$PRIVATE_KEY" > private_key.pem
-          chmod 600 private_key.pem
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER}@${HOST} << 'EOF'
-            cd /home/ubuntu/app
-            docker compose -f compose.dev.yaml pull
-            docker compose -f compose.dev.yaml up -d
-            docker system prune -f
+          # 각 인스턴스에 대해 배포 수행
+          for IP in $INSTANCE_IPS; do
+            echo "========================================="
+            echo "Deploying to instance: $IP"
+            echo "========================================="
+
+            # compose 파일 복사
+            ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER}@${IP} 'mkdir -p /home/ubuntu/app'
+            scp -o StrictHostKeyChecking=no -i private_key.pem compose.dev.yaml ${USER}@${IP}:/home/ubuntu/app/
+
+            # 컨테이너 업데이트
+            ssh -o StrictHostKeyChecking=no -i private_key.pem ${USER}@${IP} << 'EOF'
+              cd /home/ubuntu/app
+              docker compose -f compose.dev.yaml pull
+              docker compose -f compose.dev.yaml up -d
+              docker system prune -f
           EOF
+
+            echo "✓ Deployment completed for $IP"
+          done
+
           rm -f private_key.pem
+          echo "========================================="
+          echo "All instances deployed successfully!"
+          echo "========================================="
