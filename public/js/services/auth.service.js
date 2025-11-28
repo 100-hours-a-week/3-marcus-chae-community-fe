@@ -1,6 +1,8 @@
 /**
  * 인증 관련 API 서비스
- * 회원가입, 로그인, 로그아웃 등의 인증 기능을 제공합니다.
+ * JWT 기반 인증 (Access Token + Refresh Token)
+ * - Access Token: localStorage 저장, Authorization 헤더로 전송
+ * - Refresh Token: HttpOnly 쿠키 (자동 관리)
  */
 
 import { post, get, patch, del } from './api.service.js';
@@ -47,9 +49,10 @@ export async function login(credentials) {
     });
 
     if (response.success && response.data) {
-        // 쿠키 기반 인증이므로 사용자 정보만 저장
-        // response.data가 직접 사용자 정보 (userId, email, nickname)
-        authStorage.setUserInfo(response.data);
+        // JWT 기반 인증: accessToken과 사용자 정보 저장
+        // response.data = { accessToken, myProfileResponse }
+        authStorage.setToken(response.data.accessToken);
+        authStorage.setUserInfo(response.data.myProfileResponse);
         authStorage.setLoginStatus(true);
     } else {
         console.error('로그인 실패:', response.error);
@@ -167,10 +170,27 @@ export async function checkNicknameDuplicate(nickname) {
  * @returns {boolean}
  */
 export function isLoggedIn() {
-    // 쿠키 기반 인증이므로 token 체크 불필요
+    // JWT 기반: accessToken 존재 여부 확인
+    const token = authStorage.getToken();
     const loginStatus = authStorage.getLoginStatus();
     const userInfo = authStorage.getUserInfo();
-    return !!(loginStatus && userInfo);
+    return !!(token && loginStatus && userInfo);
+}
+
+/**
+ * 토큰 리프레시
+ * @returns {Promise<string|null>} 새로운 accessToken 또는 null
+ */
+export async function refreshToken() {
+    const response = await get('/auth/refresh');
+
+    if (response.success && response.data) {
+        // 새 accessToken 저장
+        authStorage.setToken(response.data.accessToken);
+        return response.data.accessToken;
+    }
+
+    return null;
 }
 
 export default {
@@ -184,4 +204,5 @@ export default {
     checkEmailDuplicate,
     checkNicknameDuplicate,
     isLoggedIn,
+    refreshToken,
 };
