@@ -28,6 +28,8 @@ jobs:
           push: true
           tags: dockdoinkorea/community-frontend:latest
           platforms: linux/arm64
+          cache-from: type=registry,ref=dockdoinkorea/community-frontend:buildcache
+          cache-to: type=registry,ref=dockdoinkorea/community-frontend:buildcache,mode=max
 
   deploy:
     runs-on: ubuntu-22.04-arm
@@ -52,6 +54,12 @@ jobs:
             --query 'AutoScalingGroups[0].Instances[?LifecycleState==`InService`].InstanceId' \
             --output text)
 
+          # ASG가 비어있거나 InService 인스턴스가 없는 경우 체크
+          if [ -z "$INSTANCE_IDS" ]; then
+            echo "Error: No InService instances found in ASG ${{ secrets.ASG_NAME }}"
+            exit 1
+          fi
+
           echo "Instance IDs: $INSTANCE_IDS"
 
           # 인스턴스 ID로 Public IP 조회
@@ -59,6 +67,12 @@ jobs:
             --instance-ids $INSTANCE_IDS \
             --query 'Reservations[].Instances[].PublicIpAddress' \
             --output text)
+
+          # IP 조회 실패 체크
+          if [ -z "$INSTANCE_IPS" ]; then
+            echo "Error: Failed to get Public IPs for instances"
+            exit 1
+          fi
 
           echo "instances=$INSTANCE_IPS" >> $GITHUB_OUTPUT
           echo "Found instances: $INSTANCE_IPS"

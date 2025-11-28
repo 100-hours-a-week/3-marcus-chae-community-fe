@@ -1,6 +1,5 @@
 # 의존성 (npm ci로 재설치)
 node_modules/
-package-lock.json
 
 # 로그 파일
 *.log
