@@ -23,6 +23,11 @@ export async function signup(userData) {
 
     if (!response.success) {
         console.error('회원가입 실패:', response.error);
+
+        // 409 Conflict - 이미 가입된 이메일
+        if (response.status === 409) {
+            response.error = '이미 가입된 이메일입니다.';
+        }
     }
 
     return response;
