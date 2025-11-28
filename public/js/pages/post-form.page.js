@@ -6,7 +6,7 @@
 import { validatePostTitle, validatePostContent } from '../utils/validators.js';
 import { createPost, getPostById, updatePost } from '../services/posts.service.js';
 import { navigateTo, ROUTES } from '../utils/router.js';
-import toast from '../utils/toast.js';
+import { toast } from '../utils/toast.js';
 import modal from '../utils/modal.js';
 import { showInputError, hideInputError } from '../utils/form-helpers.js';
 

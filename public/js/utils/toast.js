@@ -133,6 +133,6 @@ class Toast {
     }
 }
 
-// 싱글톤 인스턴스 생성 및 내보내기
+// 싱글톤 인스턴스 생성 및 내보내기 (named export)
 const toast = new Toast();
-export default toast;
+export { toast, Toast };

@@ -11,7 +11,7 @@ import {
 } from '../utils/validators.js';
 import { signup } from '../services/auth.service.js';
 import { navigateTo, ROUTES } from '../utils/router.js';
-import toast from '../utils/toast.js';
+import { toast } from '../utils/toast.js';
 import { showInputError, hideInputError } from '../utils/form-helpers.js';
 
 class SignupPage {

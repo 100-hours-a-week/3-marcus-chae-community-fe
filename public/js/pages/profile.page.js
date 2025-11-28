@@ -6,7 +6,7 @@
 import { validatePassword, validateNickname } from '../utils/validators.js';
 import { showInputError, hideInputError } from '../utils/form-helpers.js';
 import { getCurrentUser, updateNickname, changePassword } from '../services/auth.service.js';
-import toast from '../utils/toast.js';
+import { toast } from '../utils/toast.js';
 import { authState } from '../state/auth.state.js';
 import { navigateTo, ROUTES } from '../utils/router.js';
 

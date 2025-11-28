@@ -7,7 +7,7 @@ import { validateEmail } from '../utils/validators.js';
 import { login } from '../services/auth.service.js';
 import { navigateTo, ROUTES } from '../utils/router.js';
 import { authState } from '../state/auth.state.js';
-import toast from '../utils/toast.js';
+import { toast } from '../utils/toast.js';
 import { showInputError, hideInputError } from '../utils/form-helpers.js';
 
 class LoginPage {

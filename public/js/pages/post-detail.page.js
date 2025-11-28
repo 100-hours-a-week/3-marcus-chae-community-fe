@@ -6,7 +6,7 @@ import { getQueryParams, navigateTo, ROUTES } from '../utils/router.js';
 import { getPostById, deletePost } from '../services/posts.service.js';
 import { createComment, updateComment, deleteComment } from '../services/comments.service.js';
 import { authState } from '../state/auth.state.js';
-import toast from '../utils/toast.js';
+import { toast } from '../utils/toast.js';
 import modal from '../utils/modal.js';
 import { validateCommentContent } from '../utils/validators.js';
 
