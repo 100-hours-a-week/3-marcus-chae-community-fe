@@ -54,6 +54,11 @@ export async function login(credentials) {
         authStorage.setToken(response.data.accessToken);
         authStorage.setUserInfo(response.data.myProfileResponse);
         authStorage.setLoginStatus(true);
+
+        return {
+            success: true,
+            data: response.data.myProfileResponse,
+        };
     } else {
         console.error('로그인 실패:', response.error);
     }
