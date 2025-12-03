@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: docker.marcuth.store/community-frontend:latest
+    image: dockdoinkorea/community-frontend:latest
     container_name: my-frontend
     ports:
       - "3000:3000"
