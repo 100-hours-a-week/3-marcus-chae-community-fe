@@ -135,11 +135,7 @@ class LoginPage {
             const response = await login(credentials);
 
             if (response.success) {
-                // AuthState 업데이트
-                // response.data가 직접 사용자 정보 (userId, email, nickname)
-                // 쿠키 기반 인증이므로 token 없음
                 authState.login(response.data);
-
                 toast.success('로그인되었습니다!');
 
                 // 잠시 후 홈 페이지로 이동

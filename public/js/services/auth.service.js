@@ -26,7 +26,6 @@ export async function signup(userData) {
     if (!response.success) {
         console.error('회원가입 실패:', response.error);
 
-        // 409 Conflict - 이미 가입된 이메일
         if (response.status === 409) {
             response.error = '이미 가입된 이메일입니다.';
         }
@@ -49,8 +48,6 @@ export async function login(credentials) {
     });
 
     if (response.success && response.data) {
-        // JWT 기반 인증: accessToken과 사용자 정보 저장
-        // response.data = { accessToken, myProfileResponse }
         authStorage.setToken(response.data.accessToken);
         authStorage.setUserInfo(response.data.myProfileResponse);
         authStorage.setLoginStatus(true);
@@ -72,10 +69,7 @@ export async function login(credentials) {
  */
 export async function logout() {
     const response = await del('/auth');
-
-    // 로컬 스토리지 정리
     authStorage.clearAuth();
-
     return response;
 }
 
@@ -84,7 +78,6 @@ export async function logout() {
  * @returns {Promise<ApiResponse>}
  */
 export async function getCurrentUser() {
-    // 쿠키 기반 인증이므로 토큰 체크 불필요
     const response = await get('/users/me');
 
     if (response.success && response.data) {
@@ -122,7 +115,6 @@ export async function deleteAccount() {
     const response = await del('/users');
 
     if (response.success) {
-        // 로컬 스토리지 정리
         authStorage.clearAuth();
     } else {
         console.error('회원 탈퇴 실패:', response.error);
@@ -175,7 +167,6 @@ export async function checkNicknameDuplicate(nickname) {
  * @returns {boolean}
  */
 export function isLoggedIn() {
-    // JWT 기반: accessToken 존재 여부 확인
     const token = authStorage.getToken();
     const loginStatus = authStorage.getLoginStatus();
     const userInfo = authStorage.getUserInfo();
@@ -190,7 +181,6 @@ export async function refreshToken() {
     const response = await get('/auth/refresh');
 
     if (response.success && response.data) {
-        // 새 accessToken 저장
         authStorage.setToken(response.data.accessToken);
         return response.data.accessToken;
     }
