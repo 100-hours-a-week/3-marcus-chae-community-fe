@@ -9,6 +9,7 @@ import { getCurrentUser, updateNickname, changePassword } from '../services/auth
 import { toast } from '../utils/toast.js';
 import { authState } from '../state/auth.state.js';
 import { navigateTo, ROUTES } from '../utils/router.js';
+import { getContextualErrorMessage } from '../utils/error-handler.js';
 
 class ProfilePage {
     constructor() {
@@ -38,7 +39,7 @@ class ProfilePage {
         // 로그인 확인
         const state = authState.getState();
         if (!state.isLoggedIn) {
-            toast.error('로그인이 필요합니다.');
+            toast.warning('프로필을 보려면 로그인이 필요합니다.');
             navigateTo(ROUTES.LOGIN);
             return;
         }
@@ -89,7 +90,8 @@ class ProfilePage {
             const response = await getCurrentUser();
 
             if (!response.success) {
-                toast.error(response.error || '프로필 정보를 불러오는데 실패했습니다.');
+                const errorMessage = getContextualErrorMessage(response, '프로필 불러오기');
+                toast.error(errorMessage);
                 this.hideLoading();
                 return;
             }
@@ -98,7 +100,7 @@ class ProfilePage {
             this.hideLoading();
         } catch (error) {
             console.error('프로필 로드 에러:', error);
-            toast.error('프로필 정보를 불러오는데 실패했습니다.');
+            toast.error('프로필 정보를 불러오는 중 네트워크 오류가 발생했습니다.');
             this.hideLoading();
         }
     }
@@ -365,11 +367,12 @@ class ProfilePage {
                 // 편집 모드 종료
                 this.hideNicknameEditMode();
             } else {
-                toast.error(response.error || '닉네임 수정에 실패했습니다.');
+                const errorMessage = getContextualErrorMessage(response, '닉네임 수정');
+                toast.error(errorMessage);
             }
         } catch (error) {
             console.error('닉네임 수정 에러:', error);
-            toast.error('닉네임 수정 중 오류가 발생했습니다.');
+            toast.error('닉네임 수정 중 네트워크 오류가 발생했습니다.');
         }
     }
 
@@ -399,7 +402,8 @@ class ProfilePage {
                 toast.success('비밀번호가 변경되었습니다.');
                 this.cancelPasswordChange();
             } else {
-                toast.error(response.error || '비밀번호 변경에 실패했습니다.');
+                const errorMessage = getContextualErrorMessage(response, '비밀번호 변경');
+                toast.error(errorMessage);
             }
 
             // 버튼 다시 활성화
@@ -407,7 +411,7 @@ class ProfilePage {
             this.elements.passwordChangeBtn.textContent = '비밀번호 변경';
         } catch (error) {
             console.error('비밀번호 변경 에러:', error);
-            toast.error('비밀번호 변경 중 오류가 발생했습니다.');
+            toast.error('비밀번호 변경 중 네트워크 오류가 발생했습니다.');
 
             // 버튼 다시 활성화
             this.elements.passwordChangeBtn.disabled = false;

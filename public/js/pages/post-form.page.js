@@ -9,6 +9,7 @@ import { navigateTo, ROUTES } from '../utils/router.js';
 import { toast } from '../utils/toast.js';
 import modal from '../utils/modal.js';
 import { showInputError, hideInputError } from '../utils/form-helpers.js';
+import { getContextualErrorMessage } from '../utils/error-handler.js';
 
 class PostFormPage {
     constructor() {
@@ -93,7 +94,8 @@ class PostFormPage {
             const response = await getPostById(this.postId);
 
             if (!response.success) {
-                toast.error('게시글을 불러오는데 실패했습니다.');
+                const errorMessage = getContextualErrorMessage(response, '게시글 불러오기');
+                toast.error(errorMessage);
                 navigateTo(ROUTES.HOME);
                 return;
             }
@@ -113,7 +115,7 @@ class PostFormPage {
             this.validateContentField(false);
         } catch (error) {
             console.error('게시글 로드 실패:', error);
-            toast.error('게시글을 불러오는데 실패했습니다.');
+            toast.error('게시글 불러오기 중 네트워크 오류가 발생했습니다.');
             navigateTo(ROUTES.HOME);
         }
     }
@@ -242,7 +244,13 @@ class PostFormPage {
         const isContentValid = this.validateContentField(true);
 
         if (!isTitleValid || !isContentValid) {
-            toast.error('입력 내용을 확인해주세요.');
+            // 토스트 제거 - 인라인 에러만 표시
+            // 첫 번째 에러 필드로 포커스
+            if (!isTitleValid) {
+                this.elements.title.focus();
+            } else if (!isContentValid) {
+                this.elements.content.focus();
+            }
             return;
         }
 
@@ -272,13 +280,16 @@ class PostFormPage {
                 const postId = this.mode === 'create' ? response.data.id : this.postId;
                 navigateTo(`/pages/post-detail.html?id=${postId}`);
             } else {
-                toast.error(response.error || '게시글 저장에 실패했습니다.');
+                const action = this.mode === 'create' ? '게시글 작성' : '게시글 수정';
+                const errorMessage = getContextualErrorMessage(response, action);
+                toast.error(errorMessage);
                 this.elements.submitButton.disabled = false;
                 this.elements.submitButton.textContent = this.mode === 'create' ? '작성' : '수정';
             }
         } catch (error) {
             console.error('게시글 저장 실패:', error);
-            toast.error('게시글 저장에 실패했습니다.');
+            const action = this.mode === 'create' ? '게시글 작성' : '게시글 수정';
+            toast.error(`${action} 중 네트워크 오류가 발생했습니다.`);
             this.elements.submitButton.disabled = false;
             this.elements.submitButton.textContent = this.mode === 'create' ? '작성' : '수정';
         }

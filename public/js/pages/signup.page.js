@@ -13,6 +13,7 @@ import { signup } from '../services/auth.service.js';
 import { navigateTo, ROUTES } from '../utils/router.js';
 import { toast } from '../utils/toast.js';
 import { showInputError, hideInputError } from '../utils/form-helpers.js';
+import { getErrorMessage } from '../utils/error-handler.js';
 
 class SignupPage {
     constructor() {
@@ -245,7 +246,11 @@ class SignupPage {
                     navigateTo(ROUTES.LOGIN);
                 }, 1500);
             } else {
-                toast.error(`회원가입 실패: ${response.error}`);
+                const errorMessage = getErrorMessage(
+                    response,
+                    '회원가입에 실패했습니다. 입력 내용을 확인해주세요.'
+                );
+                toast.error(errorMessage);
 
                 // 버튼 다시 활성화
                 this.elements.signupButton.disabled = false;
@@ -253,7 +258,7 @@ class SignupPage {
             }
         } catch (error) {
             console.error('회원가입 에러:', error);
-            toast.error('회원가입 중 오류가 발생했습니다.');
+            toast.error('회원가입 중 네트워크 오류가 발생했습니다.');
 
             // 버튼 다시 활성화
             this.elements.signupButton.disabled = false;

@@ -9,6 +9,11 @@ import { authState } from '../state/auth.state.js';
 import { toast } from '../utils/toast.js';
 import modal from '../utils/modal.js';
 import { validateCommentContent } from '../utils/validators.js';
+import {
+    getContextualErrorMessage,
+    showInputError,
+    hideInputError,
+} from '../utils/error-handler.js';
 
 // ==================== 상태 관리 ====================
 let postId = null;
@@ -200,11 +205,12 @@ async function handleDeletePost() {
             toast.success('게시글이 삭제되었습니다.');
             navigateTo(ROUTES.HOME);
         } else {
-            toast.error(response.error || '게시글 삭제에 실패했습니다.');
+            const errorMessage = getContextualErrorMessage(response, '게시글 삭제');
+            toast.error(errorMessage);
         }
     } catch (error) {
         console.error('게시글 삭제 실패:', error);
-        toast.error('게시글 삭제에 실패했습니다.');
+        toast.error('게시글 삭제 중 네트워크 오류가 발생했습니다.');
     }
 }
 
@@ -286,9 +292,13 @@ async function handleCommentSubmit(e) {
     const validation = validateCommentContent(content);
 
     if (!validation.isValid) {
-        toast.error(validation.message);
+        showInputError(commentInput, validation.message);
+        commentInput.focus();
         return;
     }
+
+    // 검증 통과 시 에러 제거
+    hideInputError(commentInput);
 
     try {
         const response = await createComment(postId, content);
@@ -319,11 +329,12 @@ async function handleCommentSubmit(e) {
                 attachCommentActionListeners();
             }
         } else {
-            toast.error(response.error || '댓글 작성에 실패했습니다.');
+            const errorMessage = getContextualErrorMessage(response, '댓글 작성');
+            toast.error(errorMessage);
         }
     } catch (error) {
         console.error('댓글 작성 실패:', error);
-        toast.error('댓글 작성에 실패했습니다.');
+        toast.error('댓글 작성 중 네트워크 오류가 발생했습니다.');
     }
 }
 
@@ -489,11 +500,12 @@ async function saveCommentEdit(commentId, commentItem) {
             // 편집 모드 종료
             cancelCommentEdit(commentItem);
         } else {
-            toast.error(response.error || '댓글 수정에 실패했습니다.');
+            const errorMessage = getContextualErrorMessage(response, '댓글 수정');
+            toast.error(errorMessage);
         }
     } catch (error) {
         console.error('댓글 수정 실패:', error);
-        toast.error('댓글 수정에 실패했습니다.');
+        toast.error('댓글 수정 중 네트워크 오류가 발생했습니다.');
     }
 }
 
@@ -553,11 +565,12 @@ async function handleCommentDelete(commentId) {
                 }, 300); // fadeOut 애니메이션 시간과 일치
             }
         } else {
-            toast.error(response.error || '댓글 삭제에 실패했습니다.');
+            const errorMessage = getContextualErrorMessage(response, '댓글 삭제');
+            toast.error(errorMessage);
         }
     } catch (error) {
         console.error('댓글 삭제 실패:', error);
-        toast.error('댓글 삭제에 실패했습니다.');
+        toast.error('댓글 삭제 중 네트워크 오류가 발생했습니다.');
     }
 }
 

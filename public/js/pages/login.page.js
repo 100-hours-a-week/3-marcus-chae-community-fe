@@ -9,6 +9,7 @@ import { navigateTo, ROUTES } from '../utils/router.js';
 import { authState } from '../state/auth.state.js';
 import { toast } from '../utils/toast.js';
 import { showInputError, hideInputError } from '../utils/form-helpers.js';
+import { getErrorMessage } from '../utils/error-handler.js';
 
 class LoginPage {
     constructor() {
@@ -143,7 +144,11 @@ class LoginPage {
                     navigateTo(ROUTES.HOME);
                 }, 1000);
             } else {
-                toast.error(`로그인 실패: ${response.error}`);
+                const errorMessage = getErrorMessage(
+                    response,
+                    '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.'
+                );
+                toast.error(errorMessage);
 
                 // 버튼 다시 활성화
                 this.elements.loginButton.disabled = false;
@@ -151,7 +156,7 @@ class LoginPage {
             }
         } catch (error) {
             console.error('로그인 에러:', error);
-            toast.error('로그인 중 오류가 발생했습니다.');
+            toast.error('로그인 중 네트워크 오류가 발생했습니다.');
 
             // 버튼 다시 활성화
             this.elements.loginButton.disabled = false;
