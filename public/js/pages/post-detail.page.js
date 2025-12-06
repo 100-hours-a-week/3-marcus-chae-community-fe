@@ -79,8 +79,11 @@ function renderPost(post, newCommentId = null) {
     authorName.textContent = post.author.nickname;
     postDate.textContent = formatDate(post.createdAt);
 
-    // 조회수는 OpenAPI 응답에 없으므로 임시로 숨김
-    if (viewCount) {
+    // 조회수 표시
+    if (viewCount && post.viewCount !== undefined) {
+        viewCount.textContent = formatNumber(post.viewCount);
+        viewCount.closest('.post-stat')?.style.removeProperty('display');
+    } else if (viewCount) {
         viewCount.closest('.post-stat')?.style.setProperty('display', 'none');
     }
 
@@ -143,6 +146,18 @@ function formatDate(date) {
         hour: '2-digit',
         minute: '2-digit',
     });
+}
+
+/**
+ * 숫자 포맷팅 (1000 -> 1k)
+ */
+function formatNumber(num) {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + 'M';
+    } else if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'k';
+    }
+    return num.toString();
 }
 
 /**
