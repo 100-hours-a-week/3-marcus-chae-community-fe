@@ -106,7 +106,6 @@ export function transformPost(backendPost) {
         authorAvatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(backendPost.authorNickname)}&background=random`,
         date: new Date(backendPost.createdAt),
         views: backendPost.viewCount || 0,
-        likes: 0, // 임시 기본값
         comments: 0, // 임시 기본값
         image: null, // 썸네일 없음
     };
