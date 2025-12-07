@@ -3,10 +3,20 @@
  * 개발 중 테스트를 위한 자동 입력 기능을 제공합니다.
  *
  * ⚠️ 프로덕션 배포 시 이 파일의 import를 제거하세요!
+ *
+ * 비활성화 방법:
+ *   localStorage.setItem('DEV_HELPER_ENABLED', 'false')
+ * 다시 활성화:
+ *   localStorage.setItem('DEV_HELPER_ENABLED', 'true')
  */
 
 class DevHelper {
     constructor() {
+        // 비활성화 체크 (기본값: 활성화)
+        if (localStorage.getItem('DEV_HELPER_ENABLED') === 'false') {
+            return;
+        }
+
         this.testData = {
             login: {
                 email: 'test@example.com',
