@@ -33,6 +33,7 @@ community-fe/
 ├── server.js         # Express 개발 서버
 └── package.json      # 프로젝트 설정
 ```
+BE GitHub Repository: https://github.com/100-hours-a-week/3-marcus-chae-community-be
 
 ## 배포
 - URL: https://community.marcuth.store
